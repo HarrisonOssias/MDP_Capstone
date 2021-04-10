@@ -1,0 +1,12 @@
+End-nodes wait for Route Request packet (RREQ);
+
+Proxy node sends the RREQ in broadcast for any near node;
+
+When one node receives a RREQ package, it updates the route table and reply a Route Reply Packet (RREP) addressed to the sender and resends a new RREQ to other nodes.
+
+If a RREQ was not answered, the node has a route and can now transmit your data at a preconfigured interval;
+
+If a node receives RREQ, it updates your route table and returns a RREP that will carry out the route back to the Proxy node;
+
+When the Proxy node receives a RREP packet, it will update your route table, control a route lifetime and wait for the data of the nodes.
+
