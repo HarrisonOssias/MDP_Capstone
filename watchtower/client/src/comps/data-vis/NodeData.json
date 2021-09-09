@@ -1,0 +1,61 @@
+{
+	"hub0": [
+		{
+			"name": 1,
+			"temp": 31,
+			"humidity": 53
+		},
+		{
+			"name": 2,
+			"temp": 30,
+			"humidity": 50
+		},
+		{
+			"name": 3,
+			"temp": 33,
+			"humidity": 55
+		},
+		{
+			"name": 4,
+			"temp": 35,
+			"humidity": 60
+		},
+		{
+			"name": 5,
+			"temp": 35,
+			"humidity": 47
+		},
+		{
+			"name": 6,
+			"temp": 35,
+			"humidity": 81
+		},
+		{
+			"name": 7,
+			"temp": 32,
+			"humidity": 39
+		},
+		{
+			"name": 8,
+			"temp": 33,
+			"humidity": 93
+		},
+		{
+			"name": 9,
+			"temp": 30,
+			"humidity": 69
+		},
+		{
+			"name": 10,
+			"temp": 34,
+			"humidity": 41
+		}
+	],
+	"hub1": [
+		{ "name": "node 6", "temp": 26, "humidex": 1.1 },
+		{ "name": "node 7", "temp": 30, "humidex": 2.75 },
+		{ "name": "node 8", "temp": 28, "humidex": 1.75 },
+		{ "name": "node 9", "temp": 26, "humidex": 1.5 },
+		{ "name": "node 10", "temp": 25, "humidex": 3.75 }
+	]
+}
