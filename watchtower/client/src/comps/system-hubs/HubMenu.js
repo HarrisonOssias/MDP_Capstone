@@ -1,11 +1,33 @@
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Collapse, Space, Row, Col, Typography } from 'antd';
-import { DownOutlined } from '@ant-design/icons';
+import { DownOutlined, KeyOutlined } from '@ant-design/icons';
+import { UserContext } from '../../pages/UserConsole';
 
 const { Panel } = Collapse;
 const { Title, Paragraph, Text, Link } = Typography;
 
 function HubMenu({ hub }) {
+
+	const {hubList, setHubList, openDrawer, setOpenDrawer} = useContext(UserContext);
+
+	const handleDrawer = () => {
+		setOpenDrawer(!openDrawer);
+	};
+	
+	function callback(key) {
+		if(key[1] === '0') {
+			//open collapse
+			let newList = [...hubList];
+			newList.push(hub);
+			setHubList(newList);
+		} else {
+			//close collapse
+			let newList = [...hubList];
+			var i = newList.indexOf(hub);
+			newList.splice(i, 1);
+			setHubList(newList);
+		}
+	}
 	const header = (
 		<>
 			<Row style={{ width: '100%' }} gutter={[24, 8]} justify='start' align='middle'>
@@ -40,7 +62,7 @@ function HubMenu({ hub }) {
 	const nodeLength = hub.nodes.length;
 	return (
 		<Space direction='vertical'>
-			<Collapse expandIcon={({ isActive }) => <DownOutlined style={{ fontSize: '32px', color: '#fdbe93' }} rotate={isActive ? 90 : 0} />} expandIconPosition='right' defaultActiveKey={hub.name} style={{ width: '41vh' }}>
+			<Collapse expandIcon={({ isActive }) => <DownOutlined style={{ fontSize: '32px', color: '#fdbe93' }} rotate={isActive ? 90 : 0} />} expandIconPosition='right' defaultActiveKey={hub.id} style={{ width: '41vh' }} onChange={callback}>
 				<Panel header={header} style={{ backgroundColor: '#364156' }}>
 					<div style={{ backgroundColor: 'white' }}>
 						<Row>
