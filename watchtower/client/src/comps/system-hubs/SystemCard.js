@@ -8,7 +8,6 @@ function SystemCard(props) {
 	const hubLength = data.length;
 
 	const hubDrops = data.map((hub, index) => {
-		console.log(hub);
 		return (
 			<>
 				<Row>
