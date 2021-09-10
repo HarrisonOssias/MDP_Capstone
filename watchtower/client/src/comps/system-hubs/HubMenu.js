@@ -7,15 +7,14 @@ const { Panel } = Collapse;
 const { Title, Paragraph, Text, Link } = Typography;
 
 function HubMenu({ hub }) {
-
-	const {hubList, setHubList, openDrawer, setOpenDrawer} = useContext(UserContext);
+	const { hubList, setHubList, openDrawer, setOpenDrawer, currentHub, setCurrentHub } = useContext(UserContext);
 
 	const handleDrawer = () => {
 		setOpenDrawer(!openDrawer);
 	};
-	
+
 	function callback(key) {
-		if(key[1] === '0') {
+		if (key[1] === '0') {
 			//open collapse
 			let newList = [...hubList];
 			newList.push(hub);

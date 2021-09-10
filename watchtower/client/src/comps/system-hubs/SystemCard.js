@@ -3,12 +3,12 @@ import { Card, Row, Col } from 'antd';
 import HubMenu from './HubMenu';
 import mockData from './mock.json';
 
-
-
 function SystemCard(props) {
 	const data = mockData;
 	const hubLength = data.length;
+
 	const hubDrops = data.map((hub, index) => {
+		console.log(hub);
 		return (
 			<>
 				<Row>
@@ -19,7 +19,7 @@ function SystemCard(props) {
 		);
 	});
 	return (
-		<Card style={{ height: '93vh', maxHeight: '93vh', overflow: 'auto' }}>
+		<Card style={{ height: '88vh', overflow: 'auto', backgroundColor: '#EDF2F5' }}>
 			<Row>
 				<Col span={18}>{hubDrops}</Col>
 			</Row>
