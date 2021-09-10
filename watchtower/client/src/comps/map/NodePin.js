@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { WifiOutlined } from '@ant-design/icons';
 import { Tooltip } from 'antd';
-import { Circle } from 'react-shapes';
 import './pulse.css';
 import { UserContext } from '../../pages/UserConsole';
 
