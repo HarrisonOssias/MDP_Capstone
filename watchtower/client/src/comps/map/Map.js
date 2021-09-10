@@ -15,7 +15,7 @@ function SimpleMap() {
 		hubList.map((hub) => {
 			return hub.nodes ? (
 				hub.nodes.map((node) => {
-					return <NodePin lat={node.lat} lng={node.long} text='Node' status={node.status} />;
+					return <NodePin lat={node.lat} lng={node.long} text='Node' status={node.status} val={hub.name} />;
 				})
 			) : (
 				<></>
@@ -27,7 +27,7 @@ function SimpleMap() {
 
 	const hubPins = hubList ? (
 		hubList.map((hub, index) => {
-			return <HubPin lat={hub.lat} lng={hub.long} text='Hub' status={hub.status} />;
+			return <HubPin lat={hub.lat} lng={hub.long} text='Hub' status={hub.status} val={hub.name} />;
 		})
 	) : (
 		<></>

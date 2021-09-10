@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import NodeData from './NodeData.json';
-
-const data = NodeData.hub0;
+import { UserContext } from '../../pages/UserConsole';
 
 const NodeGraph = (props) => {
+	const { hubList, setHubList, currentHub, setCurrentHub } = useContext(UserContext);
+	const data = NodeData[currentHub];
 	return (
 		<ResponsiveContainer width='100%' height='100%'>
 			<LineChart

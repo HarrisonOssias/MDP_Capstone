@@ -10,15 +10,20 @@ const NodePin = (props) => {
 	const { hubList, setHubList, currentHub, setCurrentHub, openDrawer, setOpenDrawer } = useContext(UserContext);
 
 	useEffect(() => {
-		console.log(props.status);
 		if (props.status == 'Down') setPulser('redBlob');
 	}, []);
+
+	const handleClick = (val) => {
+		setOpenDrawer(!openDrawer);
+		setCurrentHub(val);
+		console.log(val);
+	};
 
 	return (
 		<div className='pin'>
 			<Tooltip title='node'>
 				{/* <WifiOutlined style={{ fontSize: '32px', color: '#fdbe93' }} /> */}
-				<div className={pulser} onClick={() => setOpenDrawer(!openDrawer)} />
+				<div className={pulser} onClick={() => handleClick(props.val)} />
 			</Tooltip>
 		</div>
 	);
