@@ -15,7 +15,6 @@ export function UserConsole() {
 	const [currentHub, setCurrentHub] = useState([]);
 
 	const handleDrawer = () => {
-		console.log(hubList);
 		setOpenDrawer(!openDrawer);
 	};
 	const handleClose = () => {
