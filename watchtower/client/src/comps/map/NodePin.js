@@ -16,12 +16,21 @@ const NodePin = (props) => {
 	const handleClick = (val) => {
 		setOpenDrawer(!openDrawer);
 		setCurrentHub(val);
-		console.log(val);
+		//console.log(val);
 	};
+
+	const ttObj = (
+		<>
+			<p>{props.val}</p>
+			<p>lat: {props.lat}</p>
+			<p>long: {props.lng}</p>
+			<p>battery: {props.battery * 100}%</p>
+		</>
+	)
 
 	return (
 		<div className='pin'>
-			<Tooltip title='node'>
+			<Tooltip title={ttObj}>
 				{/* <WifiOutlined style={{ fontSize: '32px', color: '#fdbe93' }} /> */}
 				<div className={pulser} onClick={() => handleClick(props.val)} />
 			</Tooltip>
