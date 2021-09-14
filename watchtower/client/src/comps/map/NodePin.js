@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { WifiOutlined } from '@ant-design/icons';
-import { Tooltip } from 'antd';
+import { Tooltip, Col, Row } from 'antd';
 import './pulse.css';
 import { UserContext } from '../../pages/UserConsole';
 
@@ -20,10 +20,17 @@ const NodePin = (props) => {
 
 	const ttObj = (
 		<>
-			<p>{props.val}</p>
-			<p>lat: {props.lat}</p>
-			<p>long: {props.lng}</p>
-			<p>battery: {props.battery * 100}%</p>
+			<Row justify="space-around">
+				<Col>{props.val}</Col>
+				<Col>|</Col>
+				<Col>{props.battery * 100}%</Col>
+			</Row>
+			<Row>
+				<Col>Lat: {props.lat}</Col>
+				<Col>&nbsp;&nbsp;</Col>
+				<Col>Long: {props.lng}</Col>
+			</Row>
+			{/* map data */}
 		</>
 	)
 
