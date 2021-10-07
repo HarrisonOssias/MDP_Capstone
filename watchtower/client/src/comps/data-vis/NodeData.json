@@ -1,0 +1,36 @@
+{
+	"hub0": [
+		{
+			"name": 8,
+			"temp": 33,
+			"humidity": 93
+		},
+		{
+			"name": 9,
+			"temp": 30,
+			"humidity": 69
+		},
+		{
+			"name": 10,
+			"temp": 34,
+			"humidity": 41
+		}
+	],
+	"hub1": [
+		{
+			"name": 3,
+			"temp": 25,
+			"humidity": 53
+		},
+		{
+			"name": 4,
+			"temp": 26,
+			"humidity": 50
+		},
+		{
+			"name": 5,
+			"temp": 33,
+			"humidity": 55
+		}
+	]
+}
