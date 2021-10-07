@@ -93,28 +93,33 @@ routes.post('/intake_data', async (req, res) => {
 });
 
 router.get('/get_all', async (req, res) => {
+	//should eventually move the get_all logic to frontend and separate those scans
 	try {
-	  let result = [];
-	  let networks = await dynamoScan.dynamoScan(dynamo, "Network");
-	  let devices = await dynamoScan.dynamoScan(dynamo, "Device");
-	  let datalist = await dynamoScan.dynamoScan(dynamo, "Data", "latest = :boolTrue", { ":boolTrue": true });
-	  networks.map((network, i) => {
-		let hub = devices.find(device => device['Id'] === network.hub_id);
-		let hubData = datalist.find(data => data['device_id'] === network.hub_id);
-		hub.data = { ...hubData.data, timestamp: hubData.timestamp };
-		hub.nodes = [];
-		network.node_ids.values.map((node_id, j) => {
-		  let node = devices.find(device => device['Id'] === node_id);
-		  let nodeData = datalist.find(data => data['device_id'] === node_id);
-		  node.data = { ...nodeData.data, timestamp: nodeData.timestamp };
-		  hub.nodes.push(node)
-		})
-		result.push(hub)
-	  })
-	  res.status(200).send(result)
+		let result = [];
+		let networks = await dynamoScan.dynamoScan(dynamo, "Network");
+		let devices = await dynamoScan.dynamoScan(dynamo, "Device");
+		if (networks.length && devices.length) {
+			let datalist = await dynamoScan.dynamoScan(dynamo, "Data", "latest = :boolTrue", { ":boolTrue": true });
+			networks.map((network, i) => {
+				let hub = devices.find(device => device['Id'] === network.hub_id);
+				let hubData = datalist.find(data => data['device_id'] === network.hub_id);
+				hub.data = { ...hubData.data, timestamp: hubData.timestamp };
+				hub.nodes = [];
+				network.node_ids.values.map((node_id, j) => {
+					let node = devices.find(device => device['Id'] === node_id);
+					let nodeData = datalist.find(data => data['device_id'] === node_id);
+					node.data = { ...nodeData.data, timestamp: nodeData.timestamp };
+					hub.nodes.push(node)
+				})
+				result.push(hub)
+			})
+			res.status(200).send(result)
+		} else {
+			res.status(200).send([]);
+		}
 	} catch (err) {
-	  res.status(500).send(err);
+		res.status(500).send(err);
 	}
-  });
+});
 
 module.exports = routes;
