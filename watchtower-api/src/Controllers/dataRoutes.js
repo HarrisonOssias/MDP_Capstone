@@ -8,9 +8,9 @@ const dataRoutes = express.Router({
 	mergeParams: true,
 });
 
-routes.use(bodyParser.json({ strict: false }));
+dataRoutes.use(bodyParser.json({ strict: false }));
 
-routes.post('/put_new', async (req, res) => {
+dataRoutes.post('/put_new', async (req, res) => {
 	try {
 		let devices = [{id: req.body.id, est_time: req.body.transTime, battery: req.body.battery, data: req.body.data, status: true}];
 		req.body.devices.map((device) => {
@@ -28,7 +28,7 @@ routes.post('/put_new', async (req, res) => {
 					":boolFalse": false
 				}
 			}
-			await dynamo.update(updateParams);
+			await req.dynamo.update(updateParams);
 			let putDataParams = {
 				TableName: 'Data',
 				Item: {
@@ -38,7 +38,7 @@ routes.post('/put_new', async (req, res) => {
 					latest: true
 				}
 			};
-			await dynamo.put(putParams);
+			await req.dynamo.put(putParams);
 			let updateDeviceParam = {
 				TableName: 'Device',
 				Key: {
@@ -50,7 +50,7 @@ routes.post('/put_new', async (req, res) => {
 					"status": device.status
 				}
 			}
-			await dynamo.update(updateDeviceParam);
+			await req.dynamo.update(updateDeviceParam);
 		})
 	} catch (err) {
 		res.status(500).send(JSON.stringify(err));
