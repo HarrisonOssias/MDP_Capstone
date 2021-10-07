@@ -3,13 +3,20 @@ const express = require('express');
 //const PORT = 3001 || process.env.SERVER_PORT;
 //const AWS = require('aws-sdk');
 var bodyParser = require('body-parser');
+const { Router } = require('express');
 
 const deviceRoutes = express.Router({
 	mergeParams: true,
 });
 
-routes.use(bodyParser.json({ strict: false }));
+deviceRoutes.use(bodyParser.json({ strict: false }));
 
+deviceRoutes.get('/get', async (req, res) => {
+	let getDeviceParams = {
+		TableName: "Device",
+		
+	}
+});
 
 
 module.exports = deviceRoutes;
