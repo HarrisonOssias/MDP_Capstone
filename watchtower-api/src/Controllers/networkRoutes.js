@@ -8,7 +8,7 @@ const networkRoutes = express.Router({
 	mergeParams: true,
 });
 
-routes.use(bodyParser.json({ strict: false }));
+networkRoutes.use(bodyParser.json({ strict: false }));
 
 
 

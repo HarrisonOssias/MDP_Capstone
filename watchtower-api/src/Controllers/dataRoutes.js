@@ -11,6 +11,7 @@ const dataRoutes = express.Router({
 dataRoutes.use(bodyParser.json({ strict: false }));
 
 dataRoutes.post('/intake_data', async (req, res) => {
+	//prob still need to do something to detect new nodes/hubs
 	try {
 		let devices = [{ id: req.body.id, est_time: req.body.transTime, battery: req.body.battery, data: req.body.data, status: true }];
 		req.body.devices.map((device) => {
