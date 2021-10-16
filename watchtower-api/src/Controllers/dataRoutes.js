@@ -3,12 +3,29 @@ const express = require('express');
 //const PORT = 3001 || process.env.SERVER_PORT;
 //const AWS = require('aws-sdk');
 var bodyParser = require('body-parser');
-const dynamoScan = require('..dynamoScan.js');
+const dynamoScan = require('../dynamoScan.js');
 const dataRoutes = express.Router({
 	mergeParams: true,
 });
 
 dataRoutes.use(bodyParser.json({ strict: false }));
+
+dataRoutes.get('/get/:deviceId', async (req, res) => {
+	try {
+		let scanDataParam = {
+			TableName: 'Data',
+			Limit: 10, // 10 rows for graph
+			FilterExpression: 'device_id = :deviceId',
+			ExpressionAttributeValues: {
+				":deviceId": req.params.deviceId
+			}
+		}
+		let datalist = await req.dynamo.scan(scanDataParam).promise();
+		res.status(200).send(datalist.Items);
+	} catch(err) {
+		res.status(500).send(JSON.stringify(err));
+	}
+})
 
 dataRoutes.post('/intake_data', async (req, res) => {
 	//prob still need to do something to detect new nodes/hubs
@@ -65,5 +82,7 @@ dataRoutes.post('/intake_data', async (req, res) => {
 		res.status(500).send(JSON.stringify(err));
 	}
 });
+
+
 
 module.exports = dataRoutes;

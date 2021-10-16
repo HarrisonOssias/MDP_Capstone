@@ -11,18 +11,36 @@ const deviceRoutes = express.Router({
 
 deviceRoutes.use(bodyParser.json({ strict: false }));
 
-deviceRoutes.get('/get', async (req, res) => {
-	
+deviceRoutes.get('/get/:id', async (req, res) => {
 	try {
-		res.status(200).send();
+		let getDeviceParam = {
+			TableName: 'Device',
+			Key: {
+				'Id': req.params.id
+			}
+		}
+		let result = await req.dynamo.get(getDeviceParam).promise();
+		res.status(200).send(result.Item);
 	} catch (err) {
 		res.status(500).send(err);
 	}
 });
 
 deviceRoutes.put('/put', async (req, res) => {
-	//does the user even add devices themselves again
 	try {
+		let putDeviceParam = {
+			TableName: 'Device',
+			Item: {
+				Id: req.body.id,
+				battery: req.body.battery,
+				isNode: req.body.isNode,
+				lat: req.body.lat,
+				lng: req.body.lng,
+				name: req.body.name,
+				status: req.body.status
+			}
+		}
+		await req.dynamo.put(putDeviceParam).promise();
 		res.status(200).send();
 	} catch (err) {
 		res.status(500).send(err);
