@@ -32,3 +32,12 @@ functions:
       - http: ANY /
       - http: 'ANY {proxy+}'
       - cors: true
+    Variables:
+      ACCESS_KEY_ID: AKIA3P3AELEYGUQL3GNI
+      DATA_TABLE: Data
+      DB_ENDPOINT: 'http://dynamodb.us-east-1.amazonaws.com'
+      DEVICE_TABLE: Device
+      NETWORK_TABLE: Network
+      REGION: us-east-1
+      SECRET_ACCESS_KEY: 4a1m9jZfCUvViG4W5YEjOJ6CIdsoV9zNwDecqSqW
+      SERVER_PORT: '3001'
