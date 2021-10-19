@@ -37,7 +37,8 @@ deviceRoutes.put('/put', async (req, res) => {
 				lat: req.body.lat,
 				lng: req.body.lng,
 				name: req.body.name,
-				status: req.body.status
+				status: req.body.status,
+				network_id: ""
 			}
 		}
 		await req.dynamo.put(putDeviceParam).promise();
@@ -55,6 +56,7 @@ deviceRoutes.post('/update', async (req, res) => {
 		"lat": 43.277704,
 		"lng": -79.92179
 		*/
+		let userNotGonnaChangeThis = req.body.status;
 		let updateDeviceParam = {
 			TableName: 'Device',
 			Key: {
