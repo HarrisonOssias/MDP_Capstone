@@ -10,13 +10,14 @@ class GetData:
 
     def makeData(self):
         timestamp = t.time()
-        data = {'id': self.id, 'est-time':timestamp, 'battery':0.9, 'status': 'true', 'data': {'temp': self.temp, 'hum': self.hum}} 
+        data = {'id': self.id, 'est_time':timestamp, 'battery':0.9, 'status': 'true', 'data': {'temp': self.temp, 'hum': self.hum}} 
         return data  
     
 
 def formData():
     data = []
-    for i in range(5):
+    nodes = ["d4fc32bc-1ea8-4088-8649-e1e59f0a4229", "a5a56a94-a7c8-4c0b-bf8e-5bd6ca0d1e72", "37105acb-fa09-43d6-a58c-a2632e2b629d"]
+    for i in nodes:
         intake = GetData(i).makeData()
         data.append(intake)
 

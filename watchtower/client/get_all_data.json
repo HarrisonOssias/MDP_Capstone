@@ -1,0 +1,59 @@
+[
+	{
+		"isNode": false,
+		"lng": -79.92179,
+		"status": true,
+		"Id": "network_id",
+		"Hub_Id": "6a54a570-407b-48f1-8ee6-6c35ac54f589",
+		"lat": 43.277704,
+		"name": "Hub1",
+		"battery": 0.9,
+		"data": {
+			"timestamp": 1634505961.4751132
+		},
+		"nodes": [
+			{
+				"isNode": true,
+				"lng": -79.926248,
+				"status": "true",
+				"Id": "37105acb-fa09-43d6-a58c-a2632e2b629d",
+				"lat": 43.276972,
+				"name": "Node3",
+				"battery": 0.9,
+				"data": {
+					"hum": 42,
+					"temp": 30,
+					"timestamp": 1634505962.7735248
+				}
+			},
+			{
+				"isNode": true,
+				"lng": -79.911578,
+				"status": "true",
+				"Id": "a5a56a94-a7c8-4c0b-bf8e-5bd6ca0d1e72",
+				"lat": 43.282137,
+				"name": "Node2",
+				"battery": 0.9,
+				"data": {
+					"hum": 35,
+					"temp": 8,
+					"timestamp": 1634505962.7735138
+				}
+			},
+			{
+				"isNode": true,
+				"lng": -79.922815,
+				"status": "true",
+				"Id": "d4fc32bc-1ea8-4088-8649-e1e59f0a4229",
+				"lat": 43.280821,
+				"name": "Node1",
+				"battery": 0.9,
+				"data": {
+					"hum": 29,
+					"temp": 16,
+					"timestamp": 1634505961.4750924
+				}
+			}
+		]
+	}
+]

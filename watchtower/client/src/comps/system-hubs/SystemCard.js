@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Card, Row, Col } from 'antd';
-import HubMenu from './HubMenu';
+import HubMenu from './NetworkMenu';
 import mockData from './mock.json';
 import Scrollbar from './Scrollbar.css';
 

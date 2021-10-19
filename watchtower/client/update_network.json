@@ -1,0 +1,35 @@
+
+Add Nodes:
+{
+    "id": "fdsfsd", //This is network id
+    "allocate": ["1231323", "123123"],
+    "unallocate" ["1231323", "123123"]
+}
+
+
+Create Network:
+{
+    "id": "fdsfsd", //This is network id
+    "name": "Network 1",
+    "hub_id": "hub1",
+    "nodes": ["1231323", "123123"],
+}
+
+Update Device:   //Called from Edit Info Modal
+{
+    "id": "fdsfds",  //This is the device id
+    "name": "Network 1",
+    "position": "dfasfdsfsadf",
+    "status": true,
+}
+
+Update Network:
+{
+    "id": "fdsfds",  //This is the device id
+    "name": "Network 1",  
+}
+
+Delete Network:
+{
+    "id": "fdsfds", //This is the network id
+}

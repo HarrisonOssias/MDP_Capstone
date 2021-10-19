@@ -34,13 +34,10 @@ function HubMenu({ hub }) {
 	const content = (
 		<div>
 			<Button style={{ backgroundColor: '#CFEAE9' }} onClick={() => setShow(true)}>
-				<Text strong={true}>Edit Names</Text>
+				<Text strong={true}>Edit Info</Text>
 			</Button>
 			<Button style={{ backgroundColor: '#CEEBD1' }} onClick={() => setShow(true)}>
-				<Text strong={true}>Edit Position</Text>
-			</Button>
-			<Button style={{ backgroundColor: '#F2E1C2' }} onClick={() => setShow(true)}>
-				<Text strong={true}>Edit Status</Text>
+				<Text strong={true}>Add Nodes</Text>
 			</Button>
 		</div>
 	);
@@ -63,7 +60,7 @@ function HubMenu({ hub }) {
 				</Col>
 				<Col>
 					<div className='icon' value={hub.name}>
-						<Popover content={content} title='Hub Settings'>
+						<Popover content={content} title='Network Settings'>
 							<SettingFilled style={{ color: '#ffff', fontSize: '20px' }} />
 						</Popover>
 					</div>
