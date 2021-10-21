@@ -37,7 +37,7 @@ deviceRoutes.put('/put', async (req, res) => {
 				lat: req.body.lat,
 				lng: req.body.lng,
 				name: req.body.name,
-				status: req.body.status,
+				status: false,
 				network_id: ""
 			}
 		}

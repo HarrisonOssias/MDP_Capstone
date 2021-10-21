@@ -26,6 +26,33 @@ networkRoutes.get('/get/:id', async (req, res) => {
 	}
 })
 
+networkRoutes.get('/get_devices', async (req, res) => {
+	try {
+		let result = [];
+		let networks = await dynamoScan.dynamoScan(req.dynamo, "Network");
+		let devices = await dynamoScan.dynamoScan(req.dynamo, "Device");
+		if (networks.length && devices.length) {
+			networks.map((network, i) => {
+				let devicesInNetwork = devices.filter(device => device['network_id'] === network.Id);
+				let currNetwork = network;
+				currNetwork.nodes = [];
+				devicesInNetwork.map((node, j) => {
+					if (node.isNode === true) {
+						delete node.network_id;
+						currNetwork.nodes.push({Id: node.Id, name: node.name});
+					}
+				})
+				result.push(currNetwork)
+			})
+			res.status(200).send(result)
+		} else {
+			res.status(200).send([]);
+		}
+	} catch (err) {
+		res.status(500).send(err);
+	}
+})
+
 networkRoutes.put('/put', async (req, res) => {
 	try {
 		let device_ids = [req.body.hub_id, ...req.body.nodes];
