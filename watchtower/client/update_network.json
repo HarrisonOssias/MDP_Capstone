@@ -33,3 +33,42 @@ Delete Network:
 {
     "id": "fdsfds", //This is the network id
 }
+
+[
+    {
+        Id: "network_id",
+        name: "network_name"
+        nodes:[
+            {
+                Id: "node_id",
+                name: "node1"
+            },
+            {
+                Id: "node_id",
+                name: "node2"
+            },
+            {
+                Id: "node_id",
+                name: "node3"
+            }
+        ]
+    },
+    {
+        Id: "network_id",
+        name: "network_name"
+        nodes:[
+            {
+                Id: "node_id",
+                name: "node4"
+            },
+            {
+                Id: "node_id",
+                name: "node5"
+            },
+            {
+                Id: "node_id",
+                name: "node6"
+            }
+        ]
+    }
+]

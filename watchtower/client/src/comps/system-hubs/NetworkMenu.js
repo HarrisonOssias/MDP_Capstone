@@ -4,6 +4,8 @@ import { DownOutlined, KeyOutlined } from '@ant-design/icons';
 import { UserContext } from '../../pages/UserConsole';
 import { SettingFilled } from '@ant-design/icons';
 import './menu.css';
+import EditInfo from './edits/editInfo.js';
+import AddNodes from './edits/addNodes';
 
 const { Panel } = Collapse;
 const { Title, Paragraph, Text, Link } = Typography;
@@ -11,7 +13,7 @@ const { Title, Paragraph, Text, Link } = Typography;
 function HubMenu({ hub }) {
 	const { hubList, setHubList, openDrawer, setOpenDrawer, currentHub, setCurrentHub } = useContext(UserContext);
 	const [show, setShow] = useState(false);
-	const [choice, setChoice] = useState(<></>);
+	const [choice, setChoice] = useState(['', <></>]);
 	const handleDrawer = () => {
 		setOpenDrawer(!openDrawer);
 	};
@@ -33,10 +35,22 @@ function HubMenu({ hub }) {
 
 	const content = (
 		<div>
-			<Button style={{ backgroundColor: '#CFEAE9' }} onClick={() => setShow(true)}>
+			<Button
+				style={{ backgroundColor: '#CFEAE9' }}
+				onClick={() => {
+					setShow(true);
+					setChoice(['Edit Info', <EditInfo />]);
+				}}
+			>
 				<Text strong={true}>Edit Info</Text>
 			</Button>
-			<Button style={{ backgroundColor: '#CEEBD1' }} onClick={() => setShow(true)}>
+			<Button
+				style={{ backgroundColor: '#CEEBD1' }}
+				onClick={() => {
+					setShow(true);
+					setChoice(['Add Nodes', <AddNodes />]);
+				}}
+			>
 				<Text strong={true}>Add Nodes</Text>
 			</Button>
 		</div>
@@ -132,8 +146,8 @@ function HubMenu({ hub }) {
 					</Panel>
 				</Collapse>
 			</Space>
-			<Modal visible={show} onOk={() => setShow(false)} onCancel={() => setShow(false)}>
-				{choice}
+			<Modal title={choice[0]} visible={show} bodyStyle={{ height: '60vh', overflowY: 'scroll' }} onOk={() => setShow(false)} onCancel={() => setShow(false)}>
+				{choice[1]}
 			</Modal>
 		</>
 	);
