@@ -106,30 +106,30 @@ routes.post('/intake_data', async (req, res) => {
 routes.get('/get_all', async (req, res) => {
 	try {
 		let result = [];
-		let networks = await dynamoScan.dynamoScan(dynamo, "Network");
-		let devices = await dynamoScan.dynamoScan(dynamo, "Device");
+		let networks = await dynamoScan.dynamoScan(dynamo, 'Network');
+		let devices = await dynamoScan.dynamoScan(dynamo, 'Device');
 		if (networks.length && devices.length) {
-			let datalist = await dynamoScan.dynamoScan(dynamo, "Data", "latest = :boolTrue", { ":boolTrue": true });
+			let datalist = await dynamoScan.dynamoScan(dynamo, 'Data', 'latest = :boolTrue', { ':boolTrue': true });
 			networks.map((network, i) => {
-				let devicesInNetwork = devices.filter(device => device['network_id'] === network.Id);
+				let devicesInNetwork = devices.filter((device) => device['network_id'] === network.Id);
 				let currNetwork = network;
 				currNetwork.devices = [];
-				let hub = devicesInNetwork.find(device => device['isNode'] === false)
-				let hubData = datalist.find(data => data['device_id'] === hub.Id);
+				let hub = devicesInNetwork.find((device) => device['isNode'] === false);
+				let hubData = datalist.find((data) => data['device_id'] === hub.Id);
 				hub.data = { ...hubData.data, timestamp: hubData.timestamp };
 				delete hub.network_id;
 				currNetwork.devices.push(hub);
 				devicesInNetwork.map((node, j) => {
 					if (node.isNode === true) {
-						let nodeData = datalist.find(data => data['device_id'] === node.Id);
+						let nodeData = datalist.find((data) => data['device_id'] === node.Id);
 						node.data = { ...nodeData.data, timestamp: nodeData.timestamp };
 						delete node.network_id;
 						currNetwork.devices.push(node);
 					}
-				})
-				result.push(currNetwork)
-			})
-			res.status(200).send(result)
+				});
+				result.push(currNetwork);
+			});
+			res.status(200).send(result);
 		} else {
 			res.status(200).send([]);
 		}

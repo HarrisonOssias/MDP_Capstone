@@ -11,5 +11,8 @@
     "express": "^4.17.1",
     "serverless-http": "^2.7.0",
     "uuidv4": "^6.2.12"
+  },
+  "devDependencies": {
+    "serverless-offline": "^8.2.0"
   }
 }

@@ -16,42 +16,42 @@ networkRoutes.get('/get/:id', async (req, res) => {
 		let getNetworkParam = {
 			TableName: 'Network',
 			Key: {
-				'hub_id': req.params.id
-			}
-		}
+				'hub_id': req.params.id,
+			},
+		};
 		let result = await req.dynamo.get(getNetworkParam).promise();
 		res.status(200).send(result.Item);
 	} catch (err) {
 		res.status(500).send(err);
 	}
-})
+});
 
 networkRoutes.get('/get_devices', async (req, res) => {
 	try {
 		let result = [];
-		let networks = await dynamoScan.dynamoScan(req.dynamo, "Network");
-		let devices = await dynamoScan.dynamoScan(req.dynamo, "Device");
+		let networks = await dynamoScan.dynamoScan(req.dynamo, 'Network');
+		let devices = await dynamoScan.dynamoScan(req.dynamo, 'Device');
 		if (networks.length && devices.length) {
 			networks.map((network, i) => {
-				let devicesInNetwork = devices.filter(device => device['network_id'] === network.Id);
+				let devicesInNetwork = devices.filter((device) => device['network_id'] === network.Id);
 				let currNetwork = network;
 				currNetwork.nodes = [];
 				devicesInNetwork.map((node, j) => {
 					if (node.isNode === true) {
 						delete node.network_id;
-						currNetwork.nodes.push({Id: node.Id, name: node.name});
+						currNetwork.nodes.push({ Id: node.Id, name: node.name });
 					}
-				})
-				result.push(currNetwork)
-			})
-			res.status(200).send(result)
+				});
+				result.push(currNetwork);
+			});
+			res.status(200).send(result);
 		} else {
 			res.status(200).send([]);
 		}
 	} catch (err) {
 		res.status(500).send(err);
 	}
-})
+});
 
 networkRoutes.put('/put', async (req, res) => {
 	try {
@@ -61,9 +61,9 @@ networkRoutes.put('/put', async (req, res) => {
 			TableName: 'Network',
 			Item: {
 				Id: network_id,
-				name: req.body.name
-			}
-		}
+				name: req.body.name,
+			},
+		};
 		await req.dynamo.put(putNetworkParam).promise();
 		// let transactParamsArr = [];
 		// let transactItems = [];
@@ -91,49 +91,48 @@ networkRoutes.put('/put', async (req, res) => {
 		device_ids.map(async (device_id) => {
 			let updateDeviceParam = {
 				TableName: 'Device',
-				Key: { "Id": device_id },
-				UpdateExpression: "SET network_id = :network_id",
-				ExpressionAttributeValues: { ":network_id": network_id },
-			}
+				Key: { 'Id': device_id },
+				UpdateExpression: 'SET network_id = :network_id',
+				ExpressionAttributeValues: { ':network_id': network_id },
+			};
 			await req.dynamo.update(updateDeviceParam).promise();
-		})
+		});
 
 		res.status(200).send();
 	} catch (err) {
 		res.status(500).send(err);
 	}
+});
 
-})
-
-router.post('/update_nodes', async (req, res) => {
+networkRoutes.post('/update_nodes', async (req, res) => {
 	try {
 		if (req.body.allocate.length) {
 			req.body.allocate.map(async (node) => {
 				let updateDeviceParam = {
 					TableName: 'Device',
-					Key: { "Id": node },
-					UpdateExpression: "SET network_id = :network_id",
-					ExpressionAttributeValues: { ":network_id": req.body.id }
-				}
-				await req.dynamo.update(updateDeviceParam).promise()
-			})
+					Key: { 'Id': node },
+					UpdateExpression: 'SET network_id = :network_id',
+					ExpressionAttributeValues: { ':network_id': req.body.id },
+				};
+				await req.dynamo.update(updateDeviceParam).promise();
+			});
 		}
 		if (req.body.unallocate.length) {
 			req.body.unallocate.map(async (node) => {
 				let updateDeviceParam = {
 					TableName: 'Device',
-					Key: { "Id": node },
-					UpdateExpression: "SET network_id = :network_id",
-					ExpressionAttributeValues: { ":network_id": "" }
-				}
-				await req.dynamo.update(updateDeviceParam).promise()
-			})
+					Key: { 'Id': node },
+					UpdateExpression: 'SET network_id = :network_id',
+					ExpressionAttributeValues: { ':network_id': '' },
+				};
+				await req.dynamo.update(updateDeviceParam).promise();
+			});
 		}
-		res.status(200).send()
+		res.status(200).send();
 	} catch (err) {
 		res.status(500).send(err);
 	}
-})
+});
 
 networkRoutes.post('/update_info', async (req, res) => {
 	try {
@@ -142,44 +141,44 @@ networkRoutes.post('/update_info', async (req, res) => {
 			Key: {
 				'Id': req.body.id,
 			},
-			UpdateExpression: "SET #networkName = :name",
+			UpdateExpression: 'SET #networkName = :name',
 			ExpressionAttributeNames: {
-				"#networkName": "name"
+				'#networkName': 'name',
 			},
 			ExpressionAttributeValues: {
-				":name": req.body.name
-			}
-		}
+				':name': req.body.name,
+			},
+		};
 		await req.dynamo.update(updateNetworkParam).promise();
-		res.status(200).send()
+		res.status(200).send();
 	} catch (err) {
 		res.status(500).send(err);
 	}
-})
+});
 
 networkRoutes.delete('/delete', async (req, res) => {
 	try {
 		let deleteNetworkParams = {
 			TableName: 'Network',
-			Key: { "Id": req.body.id }
-		}
-		await req.dynamo.delete(deleteNetworkParams).promise()
-		let devices = await dynamoScan.dynamoScan(req.dynamo, "Device", "network_id = :network_id", { ":network_id": req.body.id });
+			Key: { 'Id': req.body.id },
+		};
+		await req.dynamo.delete(deleteNetworkParams).promise();
+		let devices = await dynamoScan.dynamoScan(req.dynamo, 'Device', 'network_id = :network_id', { ':network_id': req.body.id });
 		if (devices) {
 			devices.map(async (device) => {
 				let updateDeviceParam = {
 					TableName: 'Device',
-					Key: { "Id": device.Id },
-					UpdateExpression: "SET network_id = :network_id",
-					ExpressionAttributeValues: { ":network_id": "" },
-				}
+					Key: { 'Id': device.Id },
+					UpdateExpression: 'SET network_id = :network_id',
+					ExpressionAttributeValues: { ':network_id': '' },
+				};
 				await req.dynamo.update(updateDeviceParam).promise();
-			})
+			});
 		}
-		res.status(200).send()
+		res.status(200).send();
 	} catch (err) {
 		res.status(500).send(err);
 	}
-})
+});
 
 module.exports = networkRoutes;
