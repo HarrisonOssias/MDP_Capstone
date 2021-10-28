@@ -14,7 +14,7 @@ PATH_TO_CERT = "certs/device-certificate.pem.crt"
 PATH_TO_KEY = "certs/private.pem.key"
 PATH_TO_ROOT = "certs/root.pem"
 MESSAGE = "Hello World"
-TOPIC = "hub/2/data"
+TOPIC = "hub/data"
 RANGE = 20
 
 # Spin up resources
@@ -43,8 +43,8 @@ timestamp = str(t.time)
 print('Begin Publish')
 
 data = formData()
-mqtt_connection.publish(topic=TOPIC, payload=data, qos=mqtt.QoS.AT_LEAST_ONCE)
-print("Published: '" + data + "' to the topic: " + "'hub/2/data'")
+mqtt_connection.publish(topic=TOPIC, payload=data, qos=mqtt.QoS.AT_MOST_ONCE)
+print("Published: '" + data + "' to the topic: " + TOPIC)
 print('Publish End')
 disconnect_future = mqtt_connection.disconnect()
 disconnect_future.result()

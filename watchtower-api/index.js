@@ -15,6 +15,7 @@ const routes = require('./src/routes.js');
 
 const serverless = require('serverless-http');
 
+app.use(cors());
 app.use('/', routes);
 
 module.exports.handler = serverless(app);

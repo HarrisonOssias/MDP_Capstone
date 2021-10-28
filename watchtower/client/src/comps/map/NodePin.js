@@ -9,7 +9,7 @@ const NodePin = (props) => {
 	const { hubList, setHubList, currentHub, setCurrentHub, openDrawer, setOpenDrawer } = useContext(UserContext);
 
 	useEffect(() => {
-		if (props.status == 'Down') setPulser('redBlob');
+		if (props.status === false) setPulser('redBlob');
 	}, []);
 
 	const handleClick = (val) => {
@@ -20,7 +20,7 @@ const NodePin = (props) => {
 
 	const ttObj = (
 		<>
-			<Row justify="space-around">
+			<Row justify='space-around'>
 				<Col>{props.val}</Col>
 				<Col>|</Col>
 				<Col>{props.battery * 100}%</Col>
@@ -32,7 +32,7 @@ const NodePin = (props) => {
 			</Row>
 			{/* map data */}
 		</>
-	)
+	);
 
 	return (
 		<div className='pin'>

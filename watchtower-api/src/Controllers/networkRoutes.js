@@ -4,6 +4,7 @@ const { v4 } = require('uuid');
 //const PORT = 3001 || process.env.SERVER_PORT;
 //const AWS = require('aws-sdk');
 var bodyParser = require('body-parser');
+const dynamoScan = require('../dynamoScan.js');
 
 const networkRoutes = express.Router({
 	mergeParams: true,
@@ -14,13 +15,14 @@ networkRoutes.use(bodyParser.json({ strict: false }));
 networkRoutes.get('/get/:id', async (req, res) => {
 	try {
 		let getNetworkParam = {
-			TableName: 'Network',
-			Key: {
-				'hub_id': req.params.id,
+			TableName: 'Device',
+			FilterExpression: 'network_id = :id',
+			ExpressionAttributeValues: {
+				':id': req.params.id,
 			},
 		};
-		let result = await req.dynamo.get(getNetworkParam).promise();
-		res.status(200).send(result.Item);
+		let result = await req.dynamo.scan(getNetworkParam).promise();
+		res.status(200).send(result.Items);
 	} catch (err) {
 		res.status(500).send(err);
 	}
@@ -28,7 +30,7 @@ networkRoutes.get('/get/:id', async (req, res) => {
 
 networkRoutes.get('/get_devices', async (req, res) => {
 	try {
-		let result = [];
+		let result = { networks: [], unallocated: [] };
 		let networks = await dynamoScan.dynamoScan(req.dynamo, 'Network');
 		let devices = await dynamoScan.dynamoScan(req.dynamo, 'Device');
 		if (networks.length && devices.length) {
@@ -38,12 +40,18 @@ networkRoutes.get('/get_devices', async (req, res) => {
 				currNetwork.nodes = [];
 				devicesInNetwork.map((node, j) => {
 					if (node.isNode === true) {
-						delete node.network_id;
 						currNetwork.nodes.push({ Id: node.Id, name: node.name });
 					}
 				});
-				result.push(currNetwork);
+				result.networks.push(currNetwork);
 			});
+			let unallocatedDevice = devices.filter((device) => device['network_id'] === '');
+			unallocatedDevice.map((device) => {
+				if (device.isNode === true) {
+					result.unallocated.push({ Id: device.Id, name: device.name });
+				}
+			});
+
 			res.status(200).send(result);
 		} else {
 			res.status(200).send([]);

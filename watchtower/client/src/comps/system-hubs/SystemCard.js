@@ -1,11 +1,28 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Card, Row, Col } from 'antd';
 import HubMenu from './NetworkMenu';
-import mockData from './mock.json';
 import Scrollbar from './Scrollbar.css';
 
+//axios library to handle api reqs
+const axios = require('axios');
+
 function SystemCard(props) {
-	const data = mockData;
+	const [data, setData] = useState([]);
+
+	useEffect(() => {
+		axios
+			.get(process.env.REACT_APP_API_ENDPOINT + '/get_all')
+			.then(function (response) {
+				// handle success
+				console.log(response.data);
+				setData(response.data);
+			})
+			.catch(function (error) {
+				// handle error
+				console.log(error);
+			});
+	}, []);
+	console.log(data);
 	const hubLength = data.length;
 	const hubDrops = data.map((hub, index) => {
 		return (

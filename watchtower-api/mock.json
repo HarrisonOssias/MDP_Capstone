@@ -1,0 +1,171 @@
+[
+	{
+		"id": "0000",
+		"name": "hub0",
+		"lat": 43.277704,
+		"long": -79.92179,
+		"status": "Ok",
+		"battery": 0.9,
+		"nodes": [
+			{
+				"id": "0000",
+				"name": "node0",
+				"lat": 43.280821,
+				"long": -79.922815,
+				"battery": 0.9,
+				"status": "Ok"
+			},
+			{
+				"id": "0001",
+				"name": "node1",
+				"lat": 43.282137,
+				"long": -79.911578,
+				"battery": 0.9,
+				"status": "Ok"
+			},
+			{
+				"id": "0002",
+				"name": "node2",
+				"lat": 43.276972,
+				"long": -79.926248,
+				"battery": 0.9,
+				"status": "Ok"
+			}
+		]
+	},
+	{
+		"id": "0001",
+		"name": "hub1",
+		"lat": 43.267372,
+		"long": -79.924377,
+		"battery": 0.9,
+		"status": "Down",
+		"nodes": [
+			{
+				"id": "0003",
+				"name": "node3",
+				"lat": 43.268879,
+				"long": -79.930114,
+				"battery": 0.9,
+				"status": "Ok"
+			},
+			{
+				"id": "0004",
+				"name": "node4",
+
+				"lat": 43.269208,
+				"long": -79.924312,
+				"battery": 0.9,
+				"status": "Ok"
+			},
+			{
+				"id": "0005",
+				"name": "node5",
+				"lat": 43.27027,
+				"long": -79.921834,
+				"battery": 0.9,
+				"status": "Down"
+			}
+		]
+	},
+	{
+		"id": "0002",
+		"name": "hub2",
+		"lat": 43.269284,
+		"long": -79.911596,
+		"status": "Ok",
+		"nodes": [
+			{
+				"id": "0006",
+				"name": "node6",
+				"lat": 43.269627,
+				"long": -79.914353,
+				"status": "Ok"
+			},
+			{
+				"id": "0007",
+				"name": "node7",
+				"lat": 43.269416,
+				"long": -79.909182,
+				"status": "Down"
+			},
+			{
+				"id": "0008",
+				"name": "node8",
+				"lat": 43.270432,
+				"long": -79.906907,
+				"status": "Ok"
+			}
+		]
+	},
+	{
+		"id": "0003",
+		"name": "hub3",
+		"lat": 43.287705,
+		"long": -79.932097,
+		"status": "Ok",
+		"nodes": [
+			{
+				"id": "0006",
+				"name": "node6",
+				"lat": 43.289313,
+				"long": -79.937287,
+				"status": "Ok"
+			},
+			{
+				"id": "0007",
+				"name": "node7",
+				"lat": 43.290781,
+				"long": -79.932684,
+				"status": "Down"
+			},
+			{
+				"id": "0008",
+				"name": "node8",
+				"lat": 43.293499,
+				"long": -79.930163,
+				"status": "Ok"
+			}
+		]
+	},
+	{
+		"id": "0004",
+		"name": "hub4",
+		"lat": 43.294481,
+		"long": -79.922946,
+		"status": "Ok",
+		"nodes": [
+			{
+				"id": "0006",
+				"name": "node6",
+				"lat": 43.298713,
+				"long": -79.923005,
+				"status": "Ok"
+			},
+			{
+				"id": "0007",
+				"name": "node7",
+				"lat": 43.298307,
+				"long": -79.917898,
+				"status": "Down"
+			},
+			{
+				"id": "0008",
+				"name": "node8",
+				"lat": 43.296418,
+				"long": -79.915396,
+				"status": "Ok"
+			}
+		]
+	}
+]
+{
+    "id": "a300cb2f-ac3c-43f4-9536-c34ab285f191",
+	"battery": 0.9,
+	"isNode": true,
+	"lat": 43.296418,
+	"lng": -79.915396,
+	"name": "Node12",
+	"status": true,
+	"network_id": "8516e957-56fc-4f0e-80c4-cbc69899dec8"
+}

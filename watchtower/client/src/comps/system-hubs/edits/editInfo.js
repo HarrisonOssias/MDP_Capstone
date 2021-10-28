@@ -1,265 +1,146 @@
-import React, { useState } from 'react';
-import { Table, Tag, Space, Button, Input, InputNumber, Popconfirm, Form, Typography } from 'antd';
-import { SaveOutlined } from '@ant-design/icons';
-const data = [
-	{
-		'Id': 'f11dec97-f6c7-48e2-8fc0-2b7aaa5fc89d',
-		'name': 'Network 1',
-		'devices': [
-			{
-				'isNode': false,
-				'lng': -79.92179,
-				'status': true,
-				'Id': '6a54a570-407b-48f1-8ee6-6c35ac54f589',
-				'lat': 43.277704,
-				'name': 'Hub1',
-				'battery': 0.9,
-				'data': {
-					'timestamp': 1634505961.4751132,
-				},
-			},
-			{
-				'isNode': true,
-				'lng': -79.922815,
-				'status': true,
-				'Id': 'd4fc32bc-1ea8-4088-8649-e1e59f0a4229',
-				'lat': 43.280821,
-				'name': 'Node1',
-				'battery': 0.9,
-				'data': {
-					'hum': 29,
-					'temp': 16,
-					'timestamp': 1634505961.4750924,
-				},
-			},
-			{
-				'isNode': true,
-				'lng': -79.911578,
-				'status': true,
-				'Id': 'a5a56a94-a7c8-4c0b-bf8e-5bd6ca0d1e72',
-				'lat': 43.282137,
-				'name': 'Node2',
-				'battery': 0.9,
-				'data': {
-					'hum': 35,
-					'temp': 8,
-					'timestamp': 1634505962.7735138,
-				},
-			},
-			{
-				'isNode': true,
-				'lng': -79.926248,
-				'status': true,
-				'Id': '37105acb-fa09-43d6-a58c-a2632e2b629d',
-				'lat': 43.276972,
-				'name': 'Node3',
-				'battery': 0.9,
-				'data': {
-					'hum': 42,
-					'temp': 30,
-					'timestamp': 1634505962.7735248,
-				},
-			},
-			{
-				'isNode': true,
-				'lng': -79.926248,
-				'status': false,
-				'Id': '37105acb-fa09-43d6-a58c-a2632e2b629d',
-				'lat': 43.276972,
-				'name': 'Node4',
-				'battery': 0.9,
-				'data': {
-					'hum': 42,
-					'temp': 30,
-					'timestamp': 1634505962.7735248,
-				},
-			},
-		],
-	},
-];
+import React, { useState, forwardRef } from 'react';
 
-const devices = data[0].devices.map((device) => {
-	let type = device.isNode ? 'node' : 'hub';
-	return {
-		name: device.name,
-		lat: device.lat,
-		long: device.lng,
-		tags: [type, device.status],
-	};
-});
+import MaterialTable from 'material-table';
+import { EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+const axios = require('axios');
 
-const ogData = devices;
-
-const EditableCell = ({ editing, dataIndex, title, inputType, record, index, children, ...restProps }) => {
-	const inputNode = inputType === 'number' ? <InputNumber /> : <Input />;
-	return (
-		<td {...restProps}>
-			{editing ? (
-				<Form.Item
-					name={dataIndex}
-					style={{
-						margin: 0,
-					}}
-					rules={[
-						{
-							required: true,
-							message: `Please Input ${title}!`,
-						},
-					]}
-				>
-					{inputNode}
-				</Form.Item>
-			) : (
-				children
-			)}
-		</td>
-	);
-};
-
-const EditInfo = () => {
-	const [form] = Form.useForm();
-	const [data, setData] = useState(ogData);
-	const [editingKey, setEditingKey] = useState('');
-
-	const isEditing = (record) => record.key === editingKey;
-
-	const edit = (record) => {
-		form.setFieldsValue({
-			name: '',
-			age: '',
-			address: '',
-			...record,
-		});
-		setEditingKey(record.key);
-	};
-
-	const cancel = () => {
-		setEditingKey('');
-	};
-
-	const save = async (key) => {
-		try {
-			const row = await form.validateFields();
-			const newData = [...data];
-			const index = newData.findIndex((item) => key === item.key);
-
-			if (index > -1) {
-				const item = newData[index];
-				newData.splice(index, 1, { ...item, ...row });
-				setData(newData);
-				setEditingKey('');
-			} else {
-				newData.push(row);
-				setData(newData);
-				setEditingKey('');
-			}
-		} catch (errInfo) {
-			console.log('Validate Failed:', errInfo);
-		}
-	};
-
+const EditInfo = ({ hub }) => {
+	const [change, setChange] = useState(true);
 	const columns = [
+		{ title: 'Device ', field: 'name', align: 'center', headerStyle: { margin: 'auto', width: '50%' }, cellStyle: { paddingLeft: '30px' } },
+		{ title: 'Longitude', field: 'long', type: 'numeric', align: 'center', headerStyle: { margin: 'auto', width: '50%' } },
+		{ title: 'Latidude', field: 'lat', type: 'numeric', align: 'center', headerStyle: { margin: 'auto', width: '50%' } },
 		{
-			title: 'Name',
-			dataIndex: 'name',
-			key: 'name',
-			editable: true,
-			render: (text) => <a>{text}</a>,
-		},
-		{
-			title: 'Longitude',
-			dataIndex: 'long',
-			key: 'long',
-			editable: true,
-		},
-		{
-			title: 'Latitude',
-			dataIndex: 'lat',
-			key: 'lat',
-			editable: true,
-		},
-		{
-			title: 'Tags',
-			key: 'tags',
-			dataIndex: 'tags',
-			width: 100,
-			render: (tags) => (
-				<>
-					{tags.map((tag) => {
-						let color = tag == 'node' ? 'geekblue' : 'green';
-						if (tag === false) {
-							color = 'volcano';
-						}
-						return (
-							<Tag color={color} key={tag}>
-								{tag.toString()}
-							</Tag>
-						);
-					})}
-				</>
-			),
-		},
-		{
-			title: 'operation',
-			dataIndex: 'operation',
-			render: (_, record) => {
-				const editable = isEditing(record);
-				return editable ? (
-					<span>
-						<a
-							href='javascript:;'
-							onClick={() => save(record.key)}
-							style={{
-								marginRight: 8,
-							}}
-						>
-							Save
-						</a>
-						<Popconfirm title='Sure to cancel?' onConfirm={cancel}>
-							<a>Cancel</a>
-						</Popconfirm>
-					</span>
-				) : (
-					<Typography.Link disabled={editingKey !== ''} onClick={() => edit(record)}>
-						Edit
-					</Typography.Link>
-				);
+			title: 'Status',
+			field: 'status',
+			cellStyle: (e, rowData) => {
+				if (rowData.status === 'Ok') {
+					return { color: 'green', fontSize: '15px' };
+				} else {
+					return { color: 'red' };
+				}
 			},
+			align: 'center',
+			headerStyle: { margin: 'auto', width: '50%' },
+		},
+		{
+			title: 'Type',
+			field: 'type',
+			align: 'center',
+			headerStyle: { margin: 'auto', width: '50%' },
 		},
 	];
-	const mergedColumns = columns.map((col) => {
-		if (!col.editable) {
-			return col;
-		}
 
+	const devices = hub.devices.map((device) => {
 		return {
-			...col,
-			onCell: (record) => ({
-				record,
-				inputType: col.dataIndex === 'age' ? 'number' : 'text',
-				dataIndex: col.dataIndex,
-				title: col.title,
-				editing: isEditing(record),
-			}),
+			id: device.Id,
+			name: device.name,
+			long: device.lng,
+			lat: device.lat,
+			status: device.status ? 'Ok' : 'Down',
+			type: device.isNode === true ? 'node' : 'hub',
 		};
 	});
+
+	const [data, setData] = useState(devices);
+
 	return (
-		<Form form={form} component={false}>
-			<Table
-				components={{
-					body: {
-						cell: EditableCell,
+		<div style={{ maxWidth: '100%' }}>
+			<MaterialTable
+				options={{
+					rowStyle: {
+						fontSize: 10,
+					},
+					search: false,
+					paging: false,
+					add: false,
+					headerStyle: { textAlign: 'right' },
+				}}
+				icons={{
+					Edit: forwardRef((props, ref) => <EditOutlined {...props} ref={ref} />),
+					Clear: forwardRef((props, ref) => <CloseCircleOutlined {...props} ref={ref} />),
+					Check: forwardRef((props, ref) => <CheckCircleOutlined {...props} ref={ref} />),
+				}}
+				columns={columns}
+				editable={{
+					onRowUpdate: async (newData, oldData) => {
+						const dataUpdate = data;
+						const index = oldData.tableData.id;
+						dataUpdate[index] = newData;
+						console.log(data);
+						try {
+							const resp = await axios
+								.post(process.env.REACT_APP_API_ENDPOINT + '/device/update', {
+									id: dataUpdate[index].id,
+									name: dataUpdate[index].name,
+									lat: dataUpdate[index].lat,
+									lng: dataUpdate[index].long,
+								})
+								.then(function (response) {
+									console.log(response);
+
+									for (let i = 0; i < devices.length(); i++) {
+										if (devices[i].id == dataUpdate[index].id) {
+											devices[i] = {
+												id: dataUpdate[index].id,
+												name: dataUpdate[index].name,
+												lat: dataUpdate[index].lat,
+												lng: dataUpdate[index].long,
+											};
+										}
+									}
+								})
+								.catch(function (error) {
+									console.log(error);
+								});
+						} catch (err) {
+							console.log(err);
+						}
+						setData(dataUpdate);
+						// new Promise((resolve, reject) => {
+						// 	setTimeout(() => {
+						// 		// const dataUpdate = [...data];
+						// 		// const index = oldData.tableData.id;
+						// 		// dataUpdate[index] = newData;
+						// 		// setData([...dataUpdate]);
+						// 		// console.log(data);
+						// 		// axios
+						// 		// 	.post(process.env.REACT_APP_API_ENDPOINT + '/device/update', {
+						// 		// 		id: dataUpdate[index].id,
+						// 		// 		name: dataUpdate[index].name,
+						// 		// 		lat: dataUpdate[index].lat,
+						// 		// 		lng: dataUpdate[index].long,
+						// 		// 	})
+						// 		// 	.then(function (response) {
+						// 		// 		console.log(response);
+						// 		// 		resolve();
+						// 		// 	})
+						// 		// 	.catch(function (error) {
+						// 		// 		console.log(error);
+						// 		// 		resolve();
+						// 		// 	});
+						// 	}, 600);
+						// 	console.log(2);
+						//});
+						console.log(3);
 					},
 				}}
-				bordered
-				dataSource={data}
-				columns={mergedColumns}
-				rowClassName='editable-row'
-				pagination={{
-					onChange: cancel,
-				}}
+				// 	onRowDelete: (oldData) =>
+				// 		new Promise((resolve, reject) => {
+				// 			setTimeout(() => {
+				// 				const dataDelete = [...data];
+				// 				const index = oldData.tableData.id;
+				// 				dataDelete.splice(index, 1);
+				// 				setData([...dataDelete]);
+
+				// 				resolve();
+				// 			}, 1000);
+				// 		}),
+
+				data={devices}
+				title={hub.name}
 			/>
-		</Form>
+		</div>
 	);
 };
 

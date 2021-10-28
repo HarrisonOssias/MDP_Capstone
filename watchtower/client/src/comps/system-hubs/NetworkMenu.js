@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { Collapse, Space, Row, Col, Typography, Popover, Button, Modal } from 'antd';
+import React, { useContext, useState, useMemo } from 'react';
+import { Collapse, Space, Row, Col, Typography, Modal } from 'antd';
 import { DownOutlined, KeyOutlined } from '@ant-design/icons';
 import { UserContext } from '../../pages/UserConsole';
 import { SettingFilled } from '@ant-design/icons';
 import './menu.css';
 import EditInfo from './edits/editInfo.js';
-import AddNodes from './edits/addNodes';
+import AddNodes from './edits/addNodes.js';
 
 const { Panel } = Collapse;
 const { Title, Paragraph, Text, Link } = Typography;
@@ -13,16 +13,17 @@ const { Title, Paragraph, Text, Link } = Typography;
 function HubMenu({ hub }) {
 	const { hubList, setHubList, openDrawer, setOpenDrawer, currentHub, setCurrentHub } = useContext(UserContext);
 	const [show, setShow] = useState(false);
-	const [choice, setChoice] = useState(['', <></>]);
+	// const [choice, setChoice] = useState(['', <></>]);
+
 	const handleDrawer = () => {
 		setOpenDrawer(!openDrawer);
 	};
 
 	function callback(key) {
+		console.log(key);
 		if (key[1] === '0') {
 			//open collapse
-			let newList = [...hubList];
-			newList.push(hub);
+			let newList = [hub, ...hubList];
 			setHubList(newList);
 		} else {
 			//close collapse
@@ -35,24 +36,14 @@ function HubMenu({ hub }) {
 
 	const content = (
 		<div>
-			<Button
-				style={{ backgroundColor: '#CFEAE9' }}
-				onClick={() => {
-					setShow(true);
-					setChoice(['Edit Info', <EditInfo />]);
-				}}
-			>
-				<Text strong={true}>Edit Info</Text>
-			</Button>
-			<Button
-				style={{ backgroundColor: '#CEEBD1' }}
-				onClick={() => {
-					setShow(true);
-					setChoice(['Add Nodes', <AddNodes />]);
-				}}
-			>
-				<Text strong={true}>Add Nodes</Text>
-			</Button>
+			<Row style={{ marginBottom: 50 }} align='center'>
+				<Col xs={18}>
+					<AddNodes net={hub} />
+				</Col>
+			</Row>
+			<Row align='center'>
+				<EditInfo hub={hub} />
+			</Row>
 		</div>
 	);
 
@@ -65,41 +56,46 @@ function HubMenu({ hub }) {
 					</Title>
 				</Col>
 				<Col>
-					<div style={{ backgroundColor: hub.status === 'Ok' ? '#94f0a9' : '#f09494', textAlign: 'center', padding: '2px 16px 2px 16px', borderRadius: '12px', width: '80px' }}>
+					<div style={{ backgroundColor: hub.devices[0].status ? '#94f0a9' : '#f09494', textAlign: 'center', padding: '2px 16px 2px 16px', borderRadius: '12px', width: '80px' }}>
 						<Title level={5} style={{ color: '#364156', margin: '0px' }}>
 							{' '}
-							{hub.status}
+							{hub.devices[0].status ? 'Ok' : 'Down'}
 						</Title>
 					</div>
 				</Col>
 				<Col>
-					<div className='icon' value={hub.name}>
-						<Popover content={content} title='Network Settings'>
-							<SettingFilled style={{ color: '#ffff', fontSize: '20px' }} />
-						</Popover>
+					<div
+						className='icon'
+						value={hub.name}
+						onClick={(e) => {
+							e.stopPropagation();
+							setShow(true);
+						}}
+					>
+						<SettingFilled style={{ color: '#ffff', fontSize: '20px' }} />
 					</div>
 				</Col>
 			</Row>
 			<Row style={{ width: '100%' }}>
 				<Col>
-					<Paragraph style={{ margin: '0px', color: 'white' }}>Lat: {hub.lat}</Paragraph>
+					<Paragraph style={{ margin: '0px', color: 'white' }}>Lat: {hub.devices[0].lat}</Paragraph>
 				</Col>
 				<Col>
 					<Paragraph style={{ margin: '0px', color: 'white', padding: '0px 10px 0px 10px' }}>|</Paragraph>
 				</Col>
 				<Col>
-					<Paragraph style={{ margin: '0px', color: 'white' }}>Long: {hub.long}</Paragraph>
+					<Paragraph style={{ margin: '0px', color: 'white' }}>Long: {hub.devices[0].lng}</Paragraph>
 				</Col>
 			</Row>
 		</>
 	);
 
-	const nodeLength = hub.nodes.length;
+	const nodeLength = hub.devices.length;
 
 	return (
 		<>
 			<Space direction='vertical'>
-				<Collapse expandIcon={({ isActive }) => <DownOutlined style={{ fontSize: '32px', color: '#fdbe93' }} rotate={isActive ? 90 : 0} />} expandIconPosition='right' defaultActiveKey={hub.id} style={{ width: '20vw' }} onChange={callback}>
+				<Collapse expandIcon={({ isActive }) => <DownOutlined style={{ fontSize: '32px', color: '#fdbe93' }} rotate={isActive ? 90 : 0} />} expandIconPosition='right' defaultActiveKey={hub.devices[0].Id} style={{ width: '20vw' }} onChange={callback}>
 					<Panel header={header} style={{ backgroundColor: '#364156' }}>
 						<div style={{ backgroundColor: 'white' }}>
 							<Row>
@@ -107,7 +103,7 @@ function HubMenu({ hub }) {
 									<div style={{ height: '100%', width: '3px', backgroundColor: '#fdbe93', marginRight: '4px', borderRadius: '2px' }} />
 								</Col>
 								<Col style={{ width: '98%' }}>
-									{hub.nodes.map((node, index) => (
+									{hub.devices.map((node, index) => (
 										<>
 											<div style={{ padding: '12px 24px 12px 24px', backgroundColor: '#e1f3f6', borderRadius: '5px' }}>
 												<Row style={{ width: '100%' }} gutter={[24, 8]} justify='start' align='middle'>
@@ -117,10 +113,10 @@ function HubMenu({ hub }) {
 														</Title>
 													</Col>
 													<Col>
-														<div style={{ backgroundColor: node.status === 'Ok' ? '#94f0a9' : '#f09494', textAlign: 'center', padding: '2px 16px 2px 16px', borderRadius: '12px', width: '80px' }}>
+														<div style={{ backgroundColor: node.status ? '#94f0a9' : '#f09494', textAlign: 'center', padding: '2px 16px 2px 16px', borderRadius: '12px', width: '80px' }}>
 															<Title level={5} style={{ color: '#364156', margin: '0px' }}>
 																{' '}
-																{node.status}
+																{node.status ? 'Ok' : 'Down'}
 															</Title>
 														</div>
 													</Col>
@@ -133,7 +129,7 @@ function HubMenu({ hub }) {
 														<Paragraph style={{ margin: '0px', color: 'black', padding: '0px 10px 0px 10px' }}>|</Paragraph>
 													</Col>
 													<Col>
-														<Paragraph style={{ margin: '0px', color: 'black' }}>Long: {node.long}</Paragraph>
+														<Paragraph style={{ margin: '0px', color: 'black' }}>Long: {node.lng}</Paragraph>
 													</Col>
 												</Row>
 											</div>
@@ -146,8 +142,8 @@ function HubMenu({ hub }) {
 					</Panel>
 				</Collapse>
 			</Space>
-			<Modal title={choice[0]} visible={show} bodyStyle={{ height: '60vh', overflowY: 'scroll' }} onOk={() => setShow(false)} onCancel={() => setShow(false)}>
-				{choice[1]}
+			<Modal title={'Edit Network'} visible={show} bodyStyle={{ height: '60vh', overflowY: 'scroll' }} width='50vw' onOk={() => setShow(false)} onCancel={() => setShow(false)}>
+				{content}
 			</Modal>
 		</>
 	);

@@ -1,4 +1,9 @@
 const express = require('express');
+
+var corsOptions = {
+	origin: 'http://localhost:3000',
+	optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
 //const env = require('dotenv').config();
 //const PORT = 3001 || process.env.SERVER_PORT;
 //const AWS = require('aws-sdk');
@@ -17,15 +22,15 @@ dataRoutes.get('/get/:deviceId', async (req, res) => {
 			Limit: 10, // 10 rows for graph
 			FilterExpression: 'device_id = :deviceId',
 			ExpressionAttributeValues: {
-				":deviceId": req.params.deviceId
-			}
-		}
+				':deviceId': req.params.deviceId,
+			},
+		};
 		let datalist = await req.dynamo.scan(scanDataParam).promise();
 		res.status(200).send(datalist.Items);
-	} catch(err) {
+	} catch (err) {
 		res.status(500).send(JSON.stringify(err));
 	}
-})
+});
 
 dataRoutes.post('/intake_data', async (req, res) => {
 	//prob still need to do something to detect new nodes/hubs
@@ -34,15 +39,15 @@ dataRoutes.post('/intake_data', async (req, res) => {
 		req.body.devices.map((device) => {
 			devices.push(device);
 		});
-		let oldDataList = await dynamoScan.dynamoScan(req.dynamo, "Data", "latest = :boolTrue", { ":boolTrue": true });
+		let oldDataList = await dynamoScan.dynamoScan(req.dynamo, 'Data', 'latest = :boolTrue', { ':boolTrue': true });
 		devices.map(async (device) => {
 			if (oldDataList.length) {
-				let dataObj = oldDataList.find(data => data.device_id === device.id);
+				let dataObj = oldDataList.find((data) => data.device_id === device.id);
 				let updateDataParams = {
 					TableName: 'Data',
 					Key: {
 						'timestamp': dataObj.timestamp,
-						'device_id': device.id
+						'device_id': device.id,
 					},
 					UpdateExpression: 'SET latest = :boolFalse',
 					ExpressionAttributeValues: {
@@ -68,7 +73,7 @@ dataRoutes.post('/intake_data', async (req, res) => {
 				},
 				UpdateExpression: 'SET battery = :battery, #deviceStatus = :deviceStatus',
 				ExpressionAttributeNames: {
-					'#deviceStatus': 'status'
+					'#deviceStatus': 'status',
 				},
 				ExpressionAttributeValues: {
 					':battery': device.battery,
@@ -82,7 +87,5 @@ dataRoutes.post('/intake_data', async (req, res) => {
 		res.status(500).send(JSON.stringify(err));
 	}
 });
-
-
 
 module.exports = dataRoutes;

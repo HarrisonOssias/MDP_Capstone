@@ -16,9 +16,9 @@ deviceRoutes.get('/get/:id', async (req, res) => {
 		let getDeviceParam = {
 			TableName: 'Device',
 			Key: {
-				'Id': req.params.id
-			}
-		}
+				'Id': req.params.id,
+			},
+		};
 		let result = await req.dynamo.get(getDeviceParam).promise();
 		res.status(200).send(result.Item);
 	} catch (err) {
@@ -37,10 +37,10 @@ deviceRoutes.put('/put', async (req, res) => {
 				lat: req.body.lat,
 				lng: req.body.lng,
 				name: req.body.name,
-				status: false,
-				network_id: ""
-			}
-		}
+				status: req.body.status,
+				network_id: req.body.network_id,
+			},
+		};
 		await req.dynamo.put(putDeviceParam).promise();
 		res.status(200).send();
 	} catch (err) {
@@ -49,35 +49,34 @@ deviceRoutes.put('/put', async (req, res) => {
 });
 
 deviceRoutes.post('/update', async (req, res) => {
-	try {
-		/*
+	//try {
+	/*
 		"id": "6a54a570-407b-48f1-8ee6-6c35ac54f589",
 		"name": "Hub1",
 		"lat": 43.277704,
 		"lng": -79.92179
 		*/
-		let userNotGonnaChangeThis = req.body.status;
-		let updateDeviceParam = {
-			TableName: 'Device',
-			Key: {
-				'Id': req.body.id,
-			},
-			UpdateExpression: "SET #deviceName = :name, lat = :lat, lng = :lng",
-			ExpressionAttributeNames: {
-				"#deviceName": "name"
-			},
-			ExpressionAttributeValues: {
-				":name": req.body.name,
-				":lat": req.body.lat,
-				":lng": req.body.lng
-			}
-		}
-		await req.dynamo.update(updateDeviceParam).promise();
-		res.status(200).send(req.body)
-	} catch (err) {
-		res.status(500).send(err);
-	}
-})
-
+	let userNotGonnaChangeThis = req.body.status;
+	let updateDeviceParam = {
+		TableName: 'Device',
+		Key: {
+			'Id': req.body.id,
+		},
+		UpdateExpression: 'SET #deviceName = :name, lat = :lat, lng = :lng',
+		ExpressionAttributeNames: {
+			'#deviceName': 'name',
+		},
+		ExpressionAttributeValues: {
+			':name': req.body.name,
+			':lat': req.body.lat,
+			':lng': req.body.lng,
+		},
+	};
+	await req.dynamo.update(updateDeviceParam).promise();
+	res.status(200).send(req.body);
+	//} catch (err) {
+	//	res.status(500).send(err);
+	//}
+});
 
 module.exports = deviceRoutes;

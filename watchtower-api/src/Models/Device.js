@@ -7,6 +7,7 @@ const Device = new dynamoose.Schema({
 	latitude: Number,
 	longitude: Number,
 	status: Boolean,
+	network_id: String,
 });
 
 module.exports = dynamoose.model('Device', Device, {

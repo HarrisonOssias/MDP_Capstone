@@ -1,7 +1,7 @@
 const express = require('express');
 const env = require('dotenv').config();
 const PORT = 3001 || process.env.SERVER_PORT;
-const cors = require('cors');
+
 const AWS = require('aws-sdk');
 var bodyParser = require('body-parser');
 
@@ -50,13 +50,10 @@ routes.use(
 
 routes.post('/intake_data', async (req, res) => {
 	try {
-		let devices = [{ id: req.body.id, est_time: req.body.transTime, battery: req.body.battery, data: req.body.data, status: true }];
-		req.body.devices.map((device) => {
-			devices.push(device);
-		});
+		let devices = req.body;
 		let oldDataList = await dynamoScan.dynamoScan(dynamo, 'Data', 'latest = :boolTrue', { ':boolTrue': true });
 		devices.map(async (device) => {
-			if (oldDataList.length) {
+			if (oldDataList.length > 0) {
 				let dataObj = oldDataList.find((data) => data.device_id === device.id);
 				let updateDataParams = {
 					TableName: 'Data',
@@ -104,37 +101,37 @@ routes.post('/intake_data', async (req, res) => {
 });
 
 routes.get('/get_all', async (req, res) => {
-	try {
-		let result = [];
-		let networks = await dynamoScan.dynamoScan(dynamo, 'Network');
-		let devices = await dynamoScan.dynamoScan(dynamo, 'Device');
-		if (networks.length && devices.length) {
-			let datalist = await dynamoScan.dynamoScan(dynamo, 'Data', 'latest = :boolTrue', { ':boolTrue': true });
-			networks.map((network, i) => {
-				let devicesInNetwork = devices.filter((device) => device['network_id'] === network.Id);
-				let currNetwork = network;
-				currNetwork.devices = [];
-				let hub = devicesInNetwork.find((device) => device['isNode'] === false);
-				let hubData = datalist.find((data) => data['device_id'] === hub.Id);
-				hub.data = { ...hubData.data, timestamp: hubData.timestamp };
-				delete hub.network_id;
-				currNetwork.devices.push(hub);
-				devicesInNetwork.map((node, j) => {
-					if (node.isNode === true) {
-						let nodeData = datalist.find((data) => data['device_id'] === node.Id);
-						node.data = { ...nodeData.data, timestamp: nodeData.timestamp };
-						delete node.network_id;
-						currNetwork.devices.push(node);
-					}
-				});
-				result.push(currNetwork);
+	// try {
+	let result = [];
+	let networks = await dynamoScan.dynamoScan(dynamo, 'Network');
+	let devices = await dynamoScan.dynamoScan(dynamo, 'Device');
+	if (networks.length && devices.length) {
+		let datalist = await dynamoScan.dynamoScan(dynamo, 'Data', 'latest = :boolTrue', { ':boolTrue': true });
+		networks.map((network, i) => {
+			let devicesInNetwork = devices.filter((device) => device['network_id'] === network.Id);
+			let currNetwork = network;
+			currNetwork.devices = [];
+			let hub = devicesInNetwork.find((device) => device['isNode'] === false);
+			let hubData = datalist.find((data) => data['device_id'] === hub.Id);
+			hub.data = hubData ? { ...hubData.data, timestamp: hubData.timestamp } : {};
+			delete hub.network_id;
+			currNetwork.devices.push(hub);
+			devicesInNetwork.map((node, j) => {
+				if (node.isNode === true) {
+					let nodeData = datalist.find((data) => data['device_id'] === node.Id);
+					node.data = nodeData ? { ...nodeData.data, timestamp: nodeData.timestamp } : {};
+					delete node.network_id;
+					currNetwork.devices.push(node);
+				}
 			});
-			res.status(200).send(result);
-		} else {
-			res.status(200).send([]);
-		}
-	} catch (err) {
-		res.status(500).send(err);
+			result.push(currNetwork);
+		});
+		res.status(200).send(result);
+	} else {
+		res.status(200).send([]);
 	}
+	// } catch (err) {
+	// 	res.status(500).send(err);
+	// }
 });
 module.exports = routes;
