@@ -1,14 +1,16 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, createContext, useEffect } from 'react';
 import { Card, Row, Col } from 'antd';
 import HubMenu from './NetworkMenu';
 import Scrollbar from './Scrollbar.css';
+
+export const HubContext = createContext();
 
 //axios library to handle api reqs
 const axios = require('axios');
 
 function SystemCard(props) {
 	const [data, setData] = useState([]);
-
+	const [reload, setReload] = useState(true);
 	useEffect(() => {
 		axios
 			.get(process.env.REACT_APP_API_ENDPOINT + '/get_all')
@@ -21,17 +23,17 @@ function SystemCard(props) {
 				// handle error
 				console.log(error);
 			});
-	}, []);
+	}, [, reload]);
 	console.log(data);
 	const hubLength = data.length;
 	const hubDrops = data.map((hub, index) => {
 		return (
-			<>
+			<HubContext.Provider value={{ reload, setReload }}>
 				<Row>
 					<HubMenu hub={hub} />
 				</Row>
 				{hubLength === index + 1 ? null : <div style={{ marginTop: '16px' }} />}
-			</>
+			</HubContext.Provider>
 		);
 	});
 	return (

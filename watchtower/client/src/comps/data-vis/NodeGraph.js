@@ -1,17 +1,43 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import NodeData from './NodeData.json';
 import { UserContext } from '../../pages/UserConsole';
+
+//axios library to handle api reqs
+const axios = require('axios');
 
 const NodeGraph = (props) => {
 	const { hubList, setHubList, currentHub, setCurrentHub } = useContext(UserContext);
-	const data = NodeData[currentHub];
+	const [data, setData] = useState([]);
+
+	useEffect(() => {
+		axios
+			.get(process.env.REACT_APP_API_ENDPOINT + '/data/get/' + currentHub.toString())
+			.then(function (response) {
+				// handle success
+				console.log(response.data);
+				setData(response.data);
+			})
+			.catch(function (error) {
+				// handle error
+				console.log(error);
+			});
+	}, [currentHub]);
+
+	const graphData = {
+		[currentHub]: data.map((data, index) => {
+			data.data.name = index;
+			return data.data;
+		}),
+	};
+
+	console.log(graphData);
+
 	return (
 		<ResponsiveContainer width='100%' height='100%'>
 			<LineChart
 				width={500}
 				height={300}
-				data={data}
+				data={graphData[currentHub]}
 				margin={{
 					top: 5,
 					right: 30,

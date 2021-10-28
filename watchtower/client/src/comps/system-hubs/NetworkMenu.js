@@ -5,13 +5,13 @@ import { UserContext } from '../../pages/UserConsole';
 import { SettingFilled } from '@ant-design/icons';
 import './menu.css';
 import EditInfo from './edits/editInfo.js';
-import AddNodes from './edits/addNodes.js';
 
 const { Panel } = Collapse;
 const { Title, Paragraph, Text, Link } = Typography;
 
 function HubMenu({ hub }) {
 	const { hubList, setHubList, openDrawer, setOpenDrawer, currentHub, setCurrentHub } = useContext(UserContext);
+
 	const [show, setShow] = useState(false);
 	// const [choice, setChoice] = useState(['', <></>]);
 
@@ -34,18 +34,18 @@ function HubMenu({ hub }) {
 		}
 	}
 
-	const content = (
-		<div>
-			<Row style={{ marginBottom: 50 }} align='center'>
-				<Col xs={18}>
-					<AddNodes net={hub} />
-				</Col>
-			</Row>
-			<Row align='center'>
-				<EditInfo hub={hub} />
-			</Row>
-		</div>
-	);
+	// const content = (
+	// 	<div>
+	// 		<Row style={{ marginBottom: 50 }} align='center'>
+	// 			<Col xs={18}>
+	// 				<AddNodes net={hub} />
+	// 			</Col>
+	// 		</Row>
+	// 		<Row align='center'>
+	// 			<EditInfo hub={hub} />
+	// 		</Row>
+	// 	</div>
+	// );
 
 	const header = (
 		<>
@@ -143,7 +143,7 @@ function HubMenu({ hub }) {
 				</Collapse>
 			</Space>
 			<Modal title={'Edit Network'} visible={show} bodyStyle={{ height: '60vh', overflowY: 'scroll' }} width='50vw' onOk={() => setShow(false)} onCancel={() => setShow(false)}>
-				{content}
+				<EditInfo hub={hub} />
 			</Modal>
 		</>
 	);

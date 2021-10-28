@@ -4,23 +4,26 @@ import { CheckOutlined } from '@ant-design/icons';
 
 const axios = require('axios');
 
-function AddNodes({ net }) {
+function AddNodes({ net }, props) {
 	const [data, setData] = useState([]);
-	const [tree, setTree] = useState([]);
+	const [tree, setTree] = useState(true);
 
-	useEffect(() => {
+	const updateTree = () => {
 		axios
 			.get(process.env.REACT_APP_API_ENDPOINT + '/network/get_devices')
 			.then(function (response) {
 				// handle success
-				console.log(response.data);
+
 				setData(response.data);
 			})
 			.catch(function (error) {
 				// handle error
 				console.log(error);
 			});
-	}, []);
+	};
+	useEffect(() => {
+		updateTree();
+	}, [, net]);
 
 	const ogNodes = net.devices
 		.filter((node) => {
@@ -126,14 +129,12 @@ function AddNodes({ net }) {
 	return (
 		<>
 			<Row>
-				<Col xs={6}>
-					<p>Add Or Remove Nodes:</p>
-				</Col>
-				<Col xs={15}>
+				<Col xs={23} style={{ paddingRight: '2px' }}>
 					<TreeSelect {...tProps} />
 				</Col>
-				<Col xs={1} offset={1}>
-					<Button type='primary' icon={<CheckOutlined />} size='mid' onClick={() => submit()} />
+
+				<Col xs={1}>
+					<Button type='primary' style={{ backgroundColor: '#364156' }} icon={<CheckOutlined />} size='mid' onClick={() => submit()} />
 				</Col>
 			</Row>
 		</>

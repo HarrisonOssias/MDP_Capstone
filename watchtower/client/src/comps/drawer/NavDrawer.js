@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { Drawer, Button, Space, Divider } from 'antd';
+import { Drawer, Button, Space, Divider, Modal } from 'antd';
 import { MenuOutlined } from '@ant-design/icons';
+import CreateDevice from './CreateDevice';
+import CreateNetwork from './CreateNetwork';
 
 function NavDrawer() {
 	const [visible, setVisible] = useState(false);
-
+	const [show, setShow] = useState(false);
+	const [content, setContent] = useState(['', <></>]);
 	const showDrawer = () => {
 		setVisible(true);
 	};
@@ -19,9 +22,25 @@ function NavDrawer() {
 				<Button style={{ width: '200px' }}>Profile Settings</Button>
 
 				<Divider />
-				<Button style={{ width: '200px' }}>Create Network</Button>
+				<Button
+					style={{ width: '200px' }}
+					onClick={() => {
+						setContent(['Create Network', <CreateNetwork />]);
+						setShow(true);
+					}}
+				>
+					Create Network
+				</Button>
 
-				<Button style={{ width: '200px' }}>Create Device</Button>
+				<Button
+					style={{ width: '200px' }}
+					onClick={() => {
+						setContent(['Create Device', <CreateDevice />]);
+						setShow(true);
+					}}
+				>
+					Create Device
+				</Button>
 			</Space>
 		</>
 	);
@@ -39,6 +58,9 @@ function NavDrawer() {
 			<Drawer title='Menu' placement='right' onClose={onClose} visible={visible} footer={drawerFooter}>
 				{drawerContent}
 			</Drawer>
+			<Modal title={content[0]} visible={show} bodyStyle={{ height: '40vh', overflowY: 'scroll' }} width='50vw' onOk={() => setShow(false)} onCancel={() => setShow(false)}>
+				{content[1]}
+			</Modal>
 		</>
 	);
 }

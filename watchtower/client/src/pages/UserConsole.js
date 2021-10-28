@@ -1,7 +1,7 @@
 import React, { useState, createContext } from 'react';
 import { Menu, Affix, Row, Col, Image, Drawer, Button } from 'antd';
 import logo from '../images/meshform.png';
-import NavDrawer from '../comps/NavDrawer';
+import NavDrawer from '../comps/drawer/NavDrawer';
 import SystemCard from '../comps/system-hubs/SystemCard';
 import Map from '../comps/map/Map';
 import GraphTabs from '../comps/data-vis/DrawerContent';

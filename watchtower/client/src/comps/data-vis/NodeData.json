@@ -34,3 +34,32 @@
 		}
 	]
 }
+[
+  {
+    "device_id": "d4fc32bc-1ea8-4088-8649-e1e59f0a4229",
+    "data": {
+      "hum": 91,
+      "temp": 13
+    },
+    "latest": false,
+    "timestamp": 1635420005.9925947
+  },
+  {
+    "device_id": "d4fc32bc-1ea8-4088-8649-e1e59f0a4229",
+    "data": {
+      "hum": 97,
+      "temp": 19
+    },
+    "latest": false,
+    "timestamp": 1635420116.8256714
+  },
+  {
+    "device_id": "d4fc32bc-1ea8-4088-8649-e1e59f0a4229",
+    "data": {
+      "hum": 77,
+      "temp": 20
+    },
+    "latest": false,
+    "timestamp": 1635420010.9059148
+  }
+]

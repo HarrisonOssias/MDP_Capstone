@@ -1,11 +1,47 @@
-import React, { useState, forwardRef } from 'react';
+import React, { useState, forwardRef, useEffect, useContext } from 'react';
 
 import MaterialTable from 'material-table';
-import { EditOutlined, CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { Row, Col, Divider, Button, Typography } from 'antd';
+import { EditFilled, CheckCircleFilled, CloseCircleFilled } from '@ant-design/icons';
+import AddNodes from './addNodes.js';
+import { HubContext } from '../SystemCard.js';
 const axios = require('axios');
 
 const EditInfo = ({ hub }) => {
-	const [change, setChange] = useState(true);
+	const { reload, setReload } = useContext(HubContext);
+	const [change, setChange] = useState(hub);
+
+	const devices = hub.devices.map((device) => {
+		return {
+			id: device.Id,
+			name: device.name,
+			long: device.lng,
+			lat: device.lat,
+			status: device.status ? 'Ok' : 'Down',
+			type: device.isNode === true ? 'node' : 'hub',
+		};
+	});
+	const [data, setData] = useState(devices);
+	const reloadHub = () => {
+		setReload(!reload);
+	};
+	const handleChange = (data) => {
+		data.isNode = true;
+		let newNet = {};
+		const devices = change.devices.filter((dev, index) => {
+			if (dev.id === data.id) {
+				return data;
+			} else {
+				return dev;
+			}
+		});
+		newNet.Id = hub.Id;
+		newNet.name = hub.name;
+		newNet.devices = devices;
+		console.log(newNet);
+		setChange(newNet);
+	};
+
 	const columns = [
 		{ title: 'Device ', field: 'name', align: 'center', headerStyle: { margin: 'auto', width: '50%' }, cellStyle: { paddingLeft: '30px' } },
 		{ title: 'Longitude', field: 'long', type: 'numeric', align: 'center', headerStyle: { margin: 'auto', width: '50%' } },
@@ -31,115 +67,68 @@ const EditInfo = ({ hub }) => {
 		},
 	];
 
-	const devices = hub.devices.map((device) => {
-		return {
-			id: device.Id,
-			name: device.name,
-			long: device.lng,
-			lat: device.lat,
-			status: device.status ? 'Ok' : 'Down',
-			type: device.isNode === true ? 'node' : 'hub',
-		};
-	});
-
-	const [data, setData] = useState(devices);
-
 	return (
-		<div style={{ maxWidth: '100%' }}>
-			<MaterialTable
-				options={{
-					rowStyle: {
-						fontSize: 10,
-					},
-					search: false,
-					paging: false,
-					add: false,
-					headerStyle: { textAlign: 'right' },
-				}}
-				icons={{
-					Edit: forwardRef((props, ref) => <EditOutlined {...props} ref={ref} />),
-					Clear: forwardRef((props, ref) => <CloseCircleOutlined {...props} ref={ref} />),
-					Check: forwardRef((props, ref) => <CheckCircleOutlined {...props} ref={ref} />),
-				}}
-				columns={columns}
-				editable={{
-					onRowUpdate: async (newData, oldData) => {
-						const dataUpdate = data;
-						const index = oldData.tableData.id;
-						dataUpdate[index] = newData;
-						console.log(data);
-						try {
-							const resp = await axios
-								.post(process.env.REACT_APP_API_ENDPOINT + '/device/update', {
-									id: dataUpdate[index].id,
-									name: dataUpdate[index].name,
-									lat: dataUpdate[index].lat,
-									lng: dataUpdate[index].long,
-								})
-								.then(function (response) {
-									console.log(response);
+		<div>
+			<Divider orientation='left' plain>
+				Add Nodes to Network{' '}
+			</Divider>
+			<Row style={{ marginBottom: 20 }} align='center'>
+				<Col xs={18}>
+					<AddNodes net={change} reload={() => setReload()} />
+				</Col>
+			</Row>
+			<Divider orientation='left' plain>
+				Edit Devices in Network{' '}
+			</Divider>
 
-									for (let i = 0; i < devices.length(); i++) {
-										if (devices[i].id == dataUpdate[index].id) {
-											devices[i] = {
-												id: dataUpdate[index].id,
-												name: dataUpdate[index].name,
-												lat: dataUpdate[index].lat,
-												lng: dataUpdate[index].long,
-											};
-										}
-									}
-								})
-								.catch(function (error) {
-									console.log(error);
-								});
-						} catch (err) {
-							console.log(err);
-						}
-						setData(dataUpdate);
-						// new Promise((resolve, reject) => {
-						// 	setTimeout(() => {
-						// 		// const dataUpdate = [...data];
-						// 		// const index = oldData.tableData.id;
-						// 		// dataUpdate[index] = newData;
-						// 		// setData([...dataUpdate]);
-						// 		// console.log(data);
-						// 		// axios
-						// 		// 	.post(process.env.REACT_APP_API_ENDPOINT + '/device/update', {
-						// 		// 		id: dataUpdate[index].id,
-						// 		// 		name: dataUpdate[index].name,
-						// 		// 		lat: dataUpdate[index].lat,
-						// 		// 		lng: dataUpdate[index].long,
-						// 		// 	})
-						// 		// 	.then(function (response) {
-						// 		// 		console.log(response);
-						// 		// 		resolve();
-						// 		// 	})
-						// 		// 	.catch(function (error) {
-						// 		// 		console.log(error);
-						// 		// 		resolve();
-						// 		// 	});
-						// 	}, 600);
-						// 	console.log(2);
-						//});
-						console.log(3);
-					},
-				}}
-				// 	onRowDelete: (oldData) =>
-				// 		new Promise((resolve, reject) => {
-				// 			setTimeout(() => {
-				// 				const dataDelete = [...data];
-				// 				const index = oldData.tableData.id;
-				// 				dataDelete.splice(index, 1);
-				// 				setData([...dataDelete]);
+			<Row align='center'>
+				<div style={{ maxWidth: '100%' }} value={change}>
+					<Button style={{ marginBottom: 20, backgroundColor: '#364156', opacity: 0.9 }} onClick={() => reloadHub()} block>
+						<Typography style={{ color: 'white' }} level={4}>
+							Reload
+						</Typography>
+					</Button>
+					<MaterialTable
+						data={data}
+						title={hub.name}
+						options={{
+							rowStyle: {
+								fontSize: 10,
+							},
+							search: false,
+							paging: false,
+							add: false,
+							headerStyle: { textAlign: 'right' },
+						}}
+						icons={{
+							Edit: forwardRef((props, ref) => <EditFilled {...props} style={{ color: '#364156' }} ref={ref} />),
+							Clear: forwardRef((props, ref) => <CloseCircleFilled {...props} style={{ color: '#364156' }} ref={ref} onClick={() => setChange(change + 1)} />),
+							Check: forwardRef((props, ref) => <CheckCircleFilled {...props} style={{ color: '#364156' }} ref={ref} />),
+						}}
+						columns={columns}
+						editable={{
+							onRowUpdate: async (newData, oldData) => {
+								const dataUpdate = data;
+								const index = oldData.tableData.id;
+								dataUpdate[index] = newData;
+								setData([...dataUpdate]);
 
-				// 				resolve();
-				// 			}, 1000);
-				// 		}),
-
-				data={devices}
-				title={hub.name}
-			/>
+								try {
+									const resp = await axios.post(process.env.REACT_APP_API_ENDPOINT + '/device/update', {
+										id: newData.id,
+										name: newData.name,
+										lat: newData.lat,
+										lng: newData.long,
+									});
+									handleChange(newData);
+								} catch (err) {
+									console.log(err);
+								}
+							},
+						}}
+					/>
+				</div>
+			</Row>
 		</div>
 	);
 };

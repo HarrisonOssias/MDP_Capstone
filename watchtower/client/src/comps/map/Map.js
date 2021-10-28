@@ -25,7 +25,7 @@ function SimpleMap() {
 
 	const hubPins = hubList ? (
 		hubList.map((hub, index) => {
-			return <HubPin lat={hub.devices[0].lat} lng={hub.devices[0].lng} status={hub.devices[0].status} val={hub.devices[0].name} battery={hub.battery} />;
+			return <HubPin lat={hub.devices[0].lat} lng={hub.devices[0].lng} status={hub.devices[0].status} val={hub.devices[0].name} id={hub.devices[0].Id} battery={hub.battery} />;
 		})
 	) : (
 		<></>
