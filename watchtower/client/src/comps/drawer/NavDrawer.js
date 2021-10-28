@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Drawer, Button, Space, Divider, Modal } from 'antd';
-import { MenuOutlined } from '@ant-design/icons';
+import { MenuOutlined, LogoutOutlined } from '@ant-design/icons';
 import CreateDevice from './CreateDevice';
 import CreateNetwork from './CreateNetwork';
 
@@ -46,8 +46,8 @@ function NavDrawer() {
 	);
 
 	const drawerFooter = (
-		<Button type='primary' style={{ width: '220px' }}>
-			settings
+		<Button  style={{ width: '220px', backgroundColor: '#364156' }}>
+			<div style={{color: 'white' }}> Sign Out <LogoutOutlined /> </div>
 		</Button>
 	);
 
@@ -58,7 +58,7 @@ function NavDrawer() {
 			<Drawer title='Menu' placement='right' onClose={onClose} visible={visible} footer={drawerFooter}>
 				{drawerContent}
 			</Drawer>
-			<Modal title={content[0]} visible={show} bodyStyle={{ height: '40vh', overflowY: 'scroll' }} width='50vw' onOk={() => setShow(false)} onCancel={() => setShow(false)}>
+			<Modal title={content[0]} visible={show} bodyStyle={{ height: '40vh', overflowY: 'scroll' }} width='20vw' onOk={() => setShow(false)} onCancel={() => setShow(false)}>
 				{content[1]}
 			</Modal>
 		</>

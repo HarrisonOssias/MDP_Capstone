@@ -22,22 +22,22 @@ function CreateDevice() {
 		}
 	};
 
-	const handleData = (id, e) => {
-		let newData = pack;
-		newData[id] = e.target.val;
-		setPack(newData);
-	};
+	// const handleData = (id, e) => {
+	// 	let newData = pack;
+	// 	newData[id] = e.target.val;
+	// 	setPack(newData);
+	// };
 	return (
 		<>
 			<Row align='center'>
 				<Col>
 					<Title level={3}>Device Details</Title>
 					<Space direction='vertical'>
-						<Input id='id' placeholder='Unique Identifier' onChange={(id) => handleData(id, e)} />
+						<Input id='id' placeholder='Unique Identifier'  />
 
 						<Input id='name' placeholder='Device Name' />
 
-						<Select id='type' placeholder='Device Type' style={{ width: 120 }} onChange={handleChange()}>
+						<Select id='type' placeholder='Device Type' style={{ width: 120 }} >
 							<Option value='true'>Node</Option>
 							<Option value='false'>Hub</Option>
 						</Select>

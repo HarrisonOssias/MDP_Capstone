@@ -21,7 +21,7 @@ const NodeGraph = (props) => {
 				// handle error
 				console.log(error);
 			});
-	}, [currentHub]);
+	}, [currentHub, setCurrentHub]);
 
 	const graphData = {
 		[currentHub]: data.map((data, index) => {

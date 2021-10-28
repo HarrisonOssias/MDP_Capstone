@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react';
-import { Menu, Affix, Row, Col, Image, Drawer, Button } from 'antd';
+import { Menu, Affix, Row, Col, Image, Drawer, Button, Typography} from 'antd';
 import logo from '../images/meshform.png';
 import NavDrawer from '../comps/drawer/NavDrawer';
 import SystemCard from '../comps/system-hubs/SystemCard';
@@ -7,6 +7,9 @@ import Map from '../comps/map/Map';
 import GraphTabs from '../comps/data-vis/DrawerContent';
 
 export const UserContext = createContext();
+
+
+let {Title} = Typography
 
 export function UserConsole() {
 	const [openDrawer, setOpenDrawer] = useState(false);
@@ -22,11 +25,14 @@ export function UserConsole() {
 
 	return (
 		<UserContext.Provider value={{ hubList, setHubList, openDrawer, setOpenDrawer, currentHub, setCurrentHub }}>
-			<Row style={{ padding: '6px 0px', display: 'flex', alignItems: 'center', backgroundColor: '#364156', height: '7vh' }}>
-				<Col span={2} style={{ paddingLeft: '1vw' }}>
+			<Row justify='center' style={{ padding: '6px 0px', display: 'flex', alignItems: 'center', backgroundColor: '#364156', height: '7vh' }}>
+				<Col xs={1} style={{ paddingLeft: '1vw' }}>
 					<img src={logo} style={{ height: '50px' }} />
 				</Col>
-				<Col span={1} offset={21} style={{ paddingLeft: '1vw' }}>
+				<Col xs={5} offset={9}>
+					<Title style={{color: 'white'}} lvl={4}>McMaster Network</Title>
+				</Col>
+				<Col xs={1} offset={8} style={{ paddingLeft: '1vw' }}>
 					<NavDrawer />
 				</Col>
 			</Row>
