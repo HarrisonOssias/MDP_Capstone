@@ -26,13 +26,11 @@ export function UserConsole() {
 	return (
 		<UserContext.Provider value={{ hubList, setHubList, openDrawer, setOpenDrawer, currentHub, setCurrentHub }}>
 			<Row justify='center' style={{ padding: '6px 0px', display: 'flex', alignItems: 'center', backgroundColor: '#364156', height: '7vh' }}>
-				<Col xs={1} style={{ paddingLeft: '1vw' }}>
+				<Col xs={2} style={{ paddingLeft: '1vw' }}>
 					<img src={logo} style={{ height: '50px' }} />
 				</Col>
-				<Col xs={5} offset={9}>
-					<Title style={{color: 'white'}} lvl={4}>McMaster Network</Title>
-				</Col>
-				<Col xs={1} offset={8} style={{ paddingLeft: '1vw' }}>
+				
+				<Col xs={1} offset={21} style={{ paddingLeft: '1vw' }}>
 					<NavDrawer />
 				</Col>
 			</Row>
