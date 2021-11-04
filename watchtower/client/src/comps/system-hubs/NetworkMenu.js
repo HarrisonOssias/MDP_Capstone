@@ -9,7 +9,7 @@ import EditInfo from './edits/editInfo.js';
 const { Panel } = Collapse;
 const { Title, Paragraph, Text, Link } = Typography;
 
-function HubMenu({ hub }) {
+function HubMenu({ hub, getData }) {
 	const { hubList, setHubList, openDrawer, setOpenDrawer, currentHub, setCurrentHub } = useContext(UserContext);
 
 	const [show, setShow] = useState(false);
@@ -33,19 +33,6 @@ function HubMenu({ hub }) {
 			setHubList(newList);
 		}
 	}
-
-	// const content = (
-	// 	<div>
-	// 		<Row style={{ marginBottom: 50 }} align='center'>
-	// 			<Col xs={18}>
-	// 				<AddNodes net={hub} />
-	// 			</Col>
-	// 		</Row>
-	// 		<Row align='center'>
-	// 			<EditInfo hub={hub} />
-	// 		</Row>
-	// 	</div>
-	// );
 
 	const header = (
 		<>
@@ -106,7 +93,7 @@ function HubMenu({ hub }) {
 									{hub.devices.map((node, index) => (
 										<>
 											<div style={{ padding: '12px 24px 12px 24px', backgroundColor: '#e1f3f6', borderRadius: '5px' }}>
-												<Row style={{ width: '100%' }} gutter={[24, 8]} justify='start' align='middle'>
+												<Row style={{ width: '100%' }} gutter={[24, 8]} justify='start' galign='middle'>
 													<Col>
 														<Title level={3} style={{ color: 'black', margin: '0px' }}>
 															{node.name}
@@ -142,7 +129,17 @@ function HubMenu({ hub }) {
 					</Panel>
 				</Collapse>
 			</Space>
-			<Modal title={'Edit Network'} visible={show} bodyStyle={{ height: '60vh', overflowY: 'scroll' }} width='50vw' onOk={() => setShow(false)} onCancel={() => setShow(false)}>
+			<Modal
+				title={'Edit Network'}
+				visible={show}
+				bodyStyle={{ height: '60vh', overflowY: 'scroll' }}
+				width='50vw'
+				onOk={() => {
+					getData();
+					setShow(false);
+				}}
+				onCancel={() => setShow(false)}
+			>
 				<EditInfo hub={hub} />
 			</Modal>
 		</>

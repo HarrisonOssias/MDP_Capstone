@@ -10,8 +10,8 @@ const axios = require('axios');
 
 function SystemCard(props) {
 	const [data, setData] = useState([]);
-	const [reload, setReload] = useState(true);
-	useEffect(() => {
+
+	const getData = () => {
 		axios
 			.get(process.env.REACT_APP_API_ENDPOINT + '/get_all')
 			.then(function (response) {
@@ -23,17 +23,22 @@ function SystemCard(props) {
 				// handle error
 				console.log(error);
 			});
-	}, [, reload]);
+	};
+
+	useEffect(() => {
+		getData();
+	}, []);
+
 	console.log(data);
 	const hubLength = data.length;
 	const hubDrops = data.map((hub, index) => {
 		return (
-			<HubContext.Provider value={{ reload, setReload }}>
+			<>
 				<Row>
-					<HubMenu hub={hub} />
+					<HubMenu hub={hub} getData={() => getData()} />
 				</Row>
 				{hubLength === index + 1 ? null : <div style={{ marginTop: '16px' }} />}
-			</HubContext.Provider>
+			</>
 		);
 	});
 	return (

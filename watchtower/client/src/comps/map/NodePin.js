@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { WifiOutlined } from '@ant-design/icons';
 import { Tooltip, Col, Row } from 'antd';
 import './pulse.css';
 import { UserContext } from '../../pages/UserConsole';

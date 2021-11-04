@@ -8,7 +8,6 @@ import { HubContext } from '../SystemCard.js';
 const axios = require('axios');
 
 const EditInfo = ({ hub }) => {
-	const { reload, setReload } = useContext(HubContext);
 	const [change, setChange] = useState(hub);
 
 	const devices = hub.devices.map((device) => {
@@ -22,9 +21,7 @@ const EditInfo = ({ hub }) => {
 		};
 	});
 	const [data, setData] = useState(devices);
-	const reloadHub = () => {
-		setReload(!reload);
-	};
+
 	const handleChange = (data) => {
 		data.isNode = true;
 		let newNet = {};
@@ -74,7 +71,7 @@ const EditInfo = ({ hub }) => {
 			</Divider>
 			<Row style={{ marginBottom: 20 }} align='center'>
 				<Col xs={18}>
-					<AddNodes net={change} reload={() => setReload()} />
+					<AddNodes net={change} />
 				</Col>
 			</Row>
 			<Divider orientation='left' plain>
@@ -83,7 +80,7 @@ const EditInfo = ({ hub }) => {
 
 			<Row align='center'>
 				<div style={{ maxWidth: '100%' }} value={change}>
-					<Button style={{ marginBottom: 20, backgroundColor: '#364156', opacity: 0.9 }} onClick={() => reloadHub()} block>
+					<Button style={{ marginBottom: 20, backgroundColor: '#364156', opacity: 0.9 }} block>
 						<Typography style={{ color: 'white' }} level={4}>
 							Reload
 						</Typography>
