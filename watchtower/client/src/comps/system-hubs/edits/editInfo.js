@@ -7,20 +7,24 @@ import AddNodes from './addNodes.js';
 import { HubContext } from '../SystemCard.js';
 const axios = require('axios');
 
-const EditInfo = ({ hub }) => {
+const EditInfo = ({ hub, getData }) => {
+	const [data, setData] = useState([]);
 	const [change, setChange] = useState(hub);
 
-	const devices = hub.devices.map((device) => {
-		return {
-			id: device.Id,
-			name: device.name,
-			long: device.lng,
-			lat: device.lat,
-			status: device.status ? 'Ok' : 'Down',
-			type: device.isNode === true ? 'node' : 'hub',
-		};
-	});
-	const [data, setData] = useState(devices);
+	useEffect(() => {
+		getData();
+		const devices = hub.devices.map((device) => {
+			return {
+				id: device.Id,
+				name: device.name,
+				long: device.lng,
+				lat: device.lat,
+				status: device.status ? 'Ok' : 'Down',
+				type: device.isNode === true ? 'node' : 'hub',
+			};
+		});
+		setData(devices);
+	}, [hub]);
 
 	const handleChange = (data) => {
 		data.isNode = true;
@@ -35,7 +39,6 @@ const EditInfo = ({ hub }) => {
 		newNet.Id = hub.Id;
 		newNet.name = hub.name;
 		newNet.devices = devices;
-		console.log(newNet);
 		setChange(newNet);
 	};
 
@@ -71,7 +74,7 @@ const EditInfo = ({ hub }) => {
 			</Divider>
 			<Row style={{ marginBottom: 20 }} align='center'>
 				<Col xs={18}>
-					<AddNodes net={change} />
+					<AddNodes hub={hub} change={change} />
 				</Col>
 			</Row>
 			<Divider orientation='left' plain>

@@ -5,7 +5,7 @@ import NodeGraph from './NodeGraph';
 
 const { TabPane } = Tabs;
 
-const units = ['Temp', 'Humidity'];
+const units = ['Temp', 'Hum'];
 
 const uncap = (str1) => {
 	return str1.charAt(0).toLowerCase() + str1.slice(1);

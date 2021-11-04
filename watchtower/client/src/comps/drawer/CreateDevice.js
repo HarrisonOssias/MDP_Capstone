@@ -16,7 +16,6 @@ function CreateDevice() {
 	const submitNew = async (id, name, type, lat, lng, netId) => {
 		try {
 			const resp = await axios.post(process.env.REACT_APP_API_ENDPOINT + '/device/put', pack);
-			console.log(resp);
 		} catch (err) {
 			console.log(err);
 		}
@@ -33,11 +32,11 @@ function CreateDevice() {
 				<Col>
 					<Title level={3}>Device Details</Title>
 					<Space direction='vertical'>
-						<Input id='id' placeholder='Unique Identifier'  />
+						<Input id='id' placeholder='Unique Identifier' />
 
 						<Input id='name' placeholder='Device Name' />
 
-						<Select id='type' placeholder='Device Type' style={{ width: 120 }} >
+						<Select id='type' placeholder='Device Type' style={{ width: 120 }}>
 							<Option value='true'>Node</Option>
 							<Option value='false'>Hub</Option>
 						</Select>

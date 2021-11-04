@@ -4,9 +4,8 @@ import { CheckOutlined } from '@ant-design/icons';
 
 const axios = require('axios');
 
-function AddNodes({ net }, props) {
+function AddNodes({ hub, change }) {
 	const [data, setData] = useState([]);
-	const [tree, setTree] = useState(true);
 
 	const updateTree = () => {
 		axios
@@ -21,11 +20,12 @@ function AddNodes({ net }, props) {
 				console.log(error);
 			});
 	};
+
 	useEffect(() => {
 		updateTree();
-	}, [, net]);
+	}, [hub, change]);
 
-	const ogNodes = net.devices
+	const ogNodes = hub.devices
 		.filter((node) => {
 			if (!node.isNode) {
 				return false;
@@ -37,7 +37,6 @@ function AddNodes({ net }, props) {
 			return node.Id;
 		});
 
-	//console.log(ogNodes);
 	let keyVal;
 	const treeData =
 		data.length === 0
@@ -115,13 +114,11 @@ function AddNodes({ net }, props) {
 
 		axios
 			.post(process.env.REACT_APP_API_ENDPOINT + '/network/update_nodes', {
-				id: net.Id,
+				id: hub.Id,
 				allocate: alocate,
 				unallocate: unalo,
 			})
-			.then(function (response) {
-				console.log(response);
-			})
+			.then(function (response) {})
 			.catch(function (error) {
 				console.log(error);
 			});

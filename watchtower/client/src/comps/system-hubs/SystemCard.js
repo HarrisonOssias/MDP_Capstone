@@ -16,7 +16,6 @@ function SystemCard(props) {
 			.get(process.env.REACT_APP_API_ENDPOINT + '/get_all')
 			.then(function (response) {
 				// handle success
-				console.log(response.data);
 				setData(response.data);
 			})
 			.catch(function (error) {
@@ -29,7 +28,6 @@ function SystemCard(props) {
 		getData();
 	}, []);
 
-	console.log(data);
 	const hubLength = data.length;
 	const hubDrops = data.map((hub, index) => {
 		return (

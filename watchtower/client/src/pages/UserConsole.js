@@ -1,5 +1,5 @@
 import React, { useState, createContext } from 'react';
-import { Menu, Affix, Row, Col, Image, Drawer, Button, Typography} from 'antd';
+import { Menu, Affix, Row, Col, Image, Drawer, Button, Typography } from 'antd';
 import logo from '../images/meshform.png';
 import NavDrawer from '../comps/drawer/NavDrawer';
 import SystemCard from '../comps/system-hubs/SystemCard';
@@ -8,8 +8,7 @@ import GraphTabs from '../comps/data-vis/DrawerContent';
 
 export const UserContext = createContext();
 
-
-let {Title} = Typography
+let { Title } = Typography;
 
 export function UserConsole() {
 	const [openDrawer, setOpenDrawer] = useState(false);
@@ -29,7 +28,7 @@ export function UserConsole() {
 				<Col xs={2} style={{ paddingLeft: '1vw' }}>
 					<img src={logo} style={{ height: '50px' }} />
 				</Col>
-				
+
 				<Col xs={1} offset={21} style={{ paddingLeft: '1vw' }}>
 					<NavDrawer />
 				</Col>

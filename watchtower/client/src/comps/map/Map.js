@@ -8,12 +8,11 @@ function SimpleMap() {
 	const zoom = 15;
 	const { hubList, setHubList } = useContext(UserContext);
 	const [center, setCenter] = useState({ lat: 43.2608775, lng: -79.9214121 });
-	console.log(hubList);
 	const nodePins = hubList ? (
 		hubList.map((hub) => {
 			return hub.devices ? (
 				hub.devices.map((node) => {
-					if (node.isNode) return <NodePin lat={node.lat} lng={node.lng} status={node.status} val={node.name} battery={node.battery} />;
+					if (node.isNode) return <NodePin lat={node.lat} lng={node.lng} status={node.status} val={node.Id} battery={node.battery} />;
 				})
 			) : (
 				<></>
@@ -34,11 +33,9 @@ function SimpleMap() {
 	useEffect(() => {
 		if (hubList.length - 1 !== -1) {
 			setCenter({ lat: hubList[0].devices[0].lat, lng: hubList[0].devices[0].lng });
-			console.log(center);
 		}
 	}, [hubList]);
 
-	console.log(hubList);
 	return (
 		// Important! Always set the container height explicitly
 		<div style={{ height: '87vh', width: '100%' }}>

@@ -14,7 +14,6 @@ const NodePin = (props) => {
 	const handleClick = (val) => {
 		setOpenDrawer(!openDrawer);
 		setCurrentHub(val);
-		//console.log(val);
 	};
 
 	const ttObj = (

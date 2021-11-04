@@ -6,14 +6,12 @@ import { Tooltip, Col, Row } from 'antd';
 const HubPin = (props) => {
 	const [styles, setStyles] = useState({ fontSize: '32px', color: '#89D3E7' });
 	const { hubList, setHubList, currentHub, setCurrentHub, openDrawer, setOpenDrawer } = useContext(UserContext);
-	console.log(hubList);
 	useEffect(() => {
 		if (props.status == 'Down') setStyles({ fontSize: '32px', color: '#EE6864' });
 	}, []);
 
 	const handleClick = (val) => {
 		setOpenDrawer(!openDrawer);
-		console.log(val);
 		setCurrentHub(val.toString());
 	};
 

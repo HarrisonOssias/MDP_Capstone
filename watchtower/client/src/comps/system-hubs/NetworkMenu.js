@@ -20,7 +20,6 @@ function HubMenu({ hub, getData }) {
 	};
 
 	function callback(key) {
-		console.log(key);
 		if (key[1] === '0') {
 			//open collapse
 			let newList = [hub, ...hubList];
@@ -140,7 +139,7 @@ function HubMenu({ hub, getData }) {
 				}}
 				onCancel={() => setShow(false)}
 			>
-				<EditInfo hub={hub} />
+				<EditInfo hub={hub} getData={getData} />
 			</Modal>
 		</>
 	);
